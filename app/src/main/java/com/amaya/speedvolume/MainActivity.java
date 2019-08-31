@@ -1,18 +1,20 @@
 package com.amaya.speedvolume;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -26,25 +28,36 @@ public class MainActivity extends AppCompatActivity {
     // Global properties
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final String TAG = "MainActivity";
+    public static final String BROADCAST_ACTION = "JOSELITO";
+    public static final String LOCATION_EXTRA = "LOCATION_EXTRA";
+    public static final String LOCATION_ACCURATE_EXTRA = "LOCATION_ACCURATE_EXTRA";
 
-    LocationListener locationListener;
-    LocationManager locationManager;
-    AudioManager audioManager;
+    static Activity globalActivity;
 
-    DecimalFormat df;
-    DecimalFormat dfAccuracy;
+    static Intent locationIntent;
+    BroadcastReceiver locationRefreshReceiver;
+    static AudioManager audioManager;
 
-    Integer speed_level_1 = 0;
-    Integer speed_level_2 = 0;
-    Integer speed_level_3 = 0;
-    Integer speed_level_4 = 0;
-    Integer speed_level_5 = 0;
+    static DecimalFormat df;
+    static DecimalFormat dfAccuracy;
 
-    Double volume_level_1 = 0.2;
-    Double volume_level_2 = 0.3;
-    Double volume_level_3 = 0.5;
-    Double volume_level_4 = 0.7;
-    Double volume_level_5 = 0.85;
+    static String speed_level_1_text = "speed_level_1";
+    static String speed_level_2_text= "speed_level_2";
+    static String speed_level_3_text = "speed_level_3";
+    static String speed_level_4_text = "speed_level_4";
+    static String speed_level_5_text = "speed_level_5";
+
+    static Integer speed_level_1 = 0;
+    static Integer speed_level_2 = 0;
+    static Integer speed_level_3 = 0;
+    static Integer speed_level_4 = 0;
+    static Integer speed_level_5 = 0;
+
+    static Double volume_level_1 = 0.2;
+    static Double volume_level_2 = 0.3;
+    static Double volume_level_3 = 0.5;
+    static Double volume_level_4 = 0.7;
+    static Double volume_level_5 = 0.85;
     // ---
 
     // UI
@@ -54,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText et_70;
     private EditText et_85;
     private EditText et_100;
-    private TextView tv_speed;
-    private TextView tv_accuracy_speed;
+    static TextView tv_speed;
+    static TextView tv_accuracy_speed;
     // ---
 
     @Override
@@ -63,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        globalActivity = this;
 
         setUI();
         setListeners();
@@ -90,10 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeActivity() {
 
-            // Location manager
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            // Location listener
-            locationListener = new LocationListener();
+            locationIntent = new Intent(globalActivity, LocationService.class);
+            locationRefreshReceiver = new LocationRefreshReceiver();
+            globalActivity.registerReceiver(locationRefreshReceiver, new IntentFilter(BROADCAST_ACTION));
 
             audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
             // Utils
@@ -102,33 +116,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startLocationRequestUpdates() {
-        // Check for location permission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            checkLocationPermission();
-        } else {
-            //Location Permission already granted
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1500,
-                    0, locationListener);
-        }
+        locationIntent.putExtra(speed_level_1_text, speed_level_1);
+        locationIntent.putExtra(speed_level_2_text, speed_level_2);
+        locationIntent.putExtra(speed_level_3_text, speed_level_3);
+        locationIntent.putExtra(speed_level_4_text, speed_level_4);
+        locationIntent.putExtra(speed_level_5_text, speed_level_5);
+
+        // Start foreground location service
+        ContextCompat.startForegroundService(globalActivity, locationIntent);
     }
 
     private void stopLocationRequestUpdates() {
-        locationManager.removeUpdates(locationListener);
+        stopService(locationIntent);
     }
 
-    private void checkLocationPermission() {
-        ActivityCompat.requestPermissions(this,
+    public static void checkLocationPermission() {
+        // First stop location service
+        globalActivity.stopService(locationIntent);
+
+        ActivityCompat.requestPermissions(globalActivity,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION},
                 MY_PERMISSIONS_REQUEST_LOCATION);
     }
 
 
-    private void setSpeedText(Location location) {
-        if (location != null) {
-            String speed = df.format(location.getSpeed()/3.6);
-            String accuracySpeed = dfAccuracy.format(location.getSpeedAccuracyMetersPerSecond()/3.6);
+    public static void setSpeedText(float speedFloat, float speedAccurateFloat) {
+        if (speedFloat != -1) {
+            String speed = df.format(speedFloat/3.6);
+            String accuracySpeed = dfAccuracy.format(speedAccurateFloat/3.6);
             tv_speed.setText(speed);
             tv_accuracy_speed.setText(accuracySpeed);
         } else {
@@ -137,11 +153,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void setVolumeLevel(float speedFloat) {
 
-    private void setVolumeLevel(Location location) {
-        Log.i(TAG, "setVolumeLevel: hola");
-
-        int speed = Math.round(location.getSpeed());
+        int speed = Math.round(speedFloat);
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int newVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
@@ -162,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSpeedLevels() {
-        // que pasa si getText está sin rellenar
         speed_level_1 = Integer.valueOf(et_30.getText().toString());
         speed_level_2 = Integer.valueOf(et_50.getText().toString());
         speed_level_3 = Integer.valueOf(et_70.getText().toString());
@@ -170,11 +183,10 @@ public class MainActivity extends AppCompatActivity {
         speed_level_5 = Integer.valueOf(et_100.getText().toString());
     }
 
-
     private void showDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Los campos están vacíos");
-        alertDialog.setMessage("Debe rellenar los niveles de velocidad");
+        alertDialog.setMessage("Debe introducir los niveles de velocidad");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -203,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
-                    setSpeedText(null);
+                    setSpeedText(-1, -1);
                 }
             } else {
                 showDialog();
@@ -212,36 +224,12 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-
-    private class LocationListener implements android.location.LocationListener {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            setVolumeLevel(location);
-            setSpeedText(location);
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    }
     // ---
 
     // Override
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
@@ -260,20 +248,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
+        stopLocationRequestUpdates();
         super.onDestroy();
-        locationManager.removeUpdates(locationListener);
     }
+    // ---
 
+    // Location receiver
+    private class LocationRefreshReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            float speed = intent.getFloatExtra(LOCATION_EXTRA, 0);
+            float speedAccurate = intent.getFloatExtra(LOCATION_ACCURATE_EXTRA, 0);
+            setVolumeLevel(speed);//TODO: MAYBE CHANGE TO SPEED ACCURATE
+            setSpeedText(speed, speedAccurate);
+        }
+    }
     // ---
 }
