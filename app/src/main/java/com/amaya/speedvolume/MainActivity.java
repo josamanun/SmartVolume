@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
                     startLocationRequestUpdates();
                 } else {
                     Toast.makeText(this, "Es necesario aceptar los permisos", Toast.LENGTH_LONG).show();
+                    switch_activate.setChecked(false);
                 }
                 return;
             }
