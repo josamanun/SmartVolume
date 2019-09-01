@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     // UI
     private Switch switch_activate;
+    private Switch switch_speed_accurate;
     private EditText et_30;
     private EditText et_50;
     private EditText et_70;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     // Functions
     private void setUI() {
         switch_activate = (Switch) this.findViewById(R.id.switch_activate);
+        switch_speed_accurate = (Switch) this.findViewById(R.id.switch_speed_accurate);
         et_30 = (EditText) this.findViewById(R.id.et_30);
         et_50 = (EditText) this.findViewById(R.id.et_50);
         et_70 = (EditText) this.findViewById(R.id.et_70);
@@ -97,10 +99,11 @@ public class MainActivity extends AppCompatActivity {
         tv_accuracy_speed = (TextView) this.findViewById(R.id.tv_accuracy_speed);
 
         switch_activate.setChecked(false);
+        switch_speed_accurate.setChecked(false);
     }
 
     private void setListeners() {
-        switch_activate.setOnCheckedChangeListener(new OnCheckedChangeListener());
+        switch_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
     }
 
     private void initializeActivity() {
@@ -156,8 +159,15 @@ public class MainActivity extends AppCompatActivity {
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int newVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume;
+        int newVolume;
+        if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
+            maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
+            newVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        } else {
+            maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            newVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }
 
         if (speed <= speed_level_1) {
             newVolume = (int) (maxVolume * volume_level_1);
@@ -172,7 +182,11 @@ public class MainActivity extends AppCompatActivity {
         } else if (speed > speed_level_5) {
             newVolume = maxVolume;
         }
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+        if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
+            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
+        } else {
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+        }
     }
 
     private void setSpeedLevels() {
@@ -198,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
     // ---
 
     // Listeners
-    private class OnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
+    private class OnActivateCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -261,7 +275,12 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             float speed = intent.getFloatExtra(LOCATION_EXTRA, 0);
             float speedAccurate = intent.getFloatExtra(LOCATION_ACCURATE_EXTRA, 0);
-            setVolumeLevel(speed);//TODO: MAYBE CHANGE TO SPEED ACCURATE
+            // Check if accurate speed switch is checked to use speedAccurate
+            if (switch_speed_accurate.isChecked()) {
+                setVolumeLevel(speedAccurate);
+            } else {
+                setVolumeLevel(speed);
+            }
             setSpeedText(speed, speedAccurate);
         }
     }

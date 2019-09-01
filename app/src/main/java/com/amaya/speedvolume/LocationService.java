@@ -32,7 +32,6 @@ public class LocationService extends Service {
     public LocationManager locationManager;
     public LocationListener locationListener;
 
-    static AudioManager audioManager;
     Intent intent;
 
     Notification notification;
@@ -49,8 +48,6 @@ public class LocationService extends Service {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Location listener
         locationListener = new LocationListener();
-        // Audio manager
-        audioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         intent = new Intent(BROADCAST_ACTION);
 

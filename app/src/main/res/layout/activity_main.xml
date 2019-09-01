@@ -238,6 +238,16 @@
 
         </LinearLayout>
 
+        <Switch
+            android:id="@+id/switch_speed_accurate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Utilizar velocidad precisa"
+            android:textSize="40px"
+            />
+
     </LinearLayout>
 
 
