@@ -1,4 +1,4 @@
-package com.amaya.speedvolume;
+package com.amaya.smartvolume;
 
 import android.Manifest;
 import android.app.Activity;

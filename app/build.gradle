@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.amaya.speedvolume"
+        applicationId "com.amaya.smartvolume"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1

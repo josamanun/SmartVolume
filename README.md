@@ -1,4 +1,4 @@
-# SpeedVolume
+# SmartVolume
 
 This proyect is about change the device volume according to the input speed.
 

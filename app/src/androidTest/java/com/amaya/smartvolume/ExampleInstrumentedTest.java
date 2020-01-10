@@ -1,4 +1,4 @@
-package com.amaya.speedvolume;
+package com.amaya.smartvolume;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.amaya.speedvolume", appContext.getPackageName());
+        assertEquals("com.amaya.smartvolume", appContext.getPackageName());
     }
 }

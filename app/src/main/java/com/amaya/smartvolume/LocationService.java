@@ -1,4 +1,4 @@
-package com.amaya.speedvolume;
+package com.amaya.smartvolume;
 
 import android.Manifest;
 import android.app.Notification;
@@ -10,20 +10,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 
-import static com.amaya.speedvolume.MainActivity.BROADCAST_ACTION;
-import static com.amaya.speedvolume.MainActivity.LOCATION_ACCURATE_EXTRA;
-import static com.amaya.speedvolume.MainActivity.LOCATION_EXTRA;
-import static com.amaya.speedvolume.MainActivity.speed_level_1_text;
-import static com.amaya.speedvolume.MainActivity.speed_level_2_text;
-import static com.amaya.speedvolume.MainActivity.speed_level_3_text;
-import static com.amaya.speedvolume.MainActivity.speed_level_4_text;
-import static com.amaya.speedvolume.MainActivity.speed_level_5_text;
+import static com.amaya.smartvolume.MainActivity.BROADCAST_ACTION;
+import static com.amaya.smartvolume.MainActivity.LOCATION_ACCURATE_EXTRA;
+import static com.amaya.smartvolume.MainActivity.LOCATION_EXTRA;
+import static com.amaya.smartvolume.MainActivity.speed_level_1_text;
+import static com.amaya.smartvolume.MainActivity.speed_level_2_text;
+import static com.amaya.smartvolume.MainActivity.speed_level_3_text;
+import static com.amaya.smartvolume.MainActivity.speed_level_4_text;
+import static com.amaya.smartvolume.MainActivity.speed_level_5_text;
 
 public class LocationService extends Service {
 
