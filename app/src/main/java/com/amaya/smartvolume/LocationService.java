@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-
 import static com.amaya.smartvolume.MainActivity.BROADCAST_ACTION;
 import static com.amaya.smartvolume.MainActivity.LOCATION_ACCURATE_EXTRA;
 import static com.amaya.smartvolume.MainActivity.LOCATION_EXTRA;
@@ -27,6 +26,7 @@ import static com.amaya.smartvolume.MainActivity.speed_level_5_text;
 public class LocationService extends Service {
 
     private static String TAG = "LocationService";
+    private static Integer REFRESH_FREQUENCY = 500;
 
     public LocationManager locationManager;
     public LocationListener locationListener;
@@ -66,7 +66,7 @@ public class LocationService extends Service {
         } else {
             setSpeedLevels(intent);
             //Location Permission already granted
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1500,
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_FREQUENCY,
                     0, locationListener);
         }
         startForeground(1, notification);
