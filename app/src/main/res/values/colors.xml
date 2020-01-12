@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBorder">#313131</color>
+    <color name="white">#FFF</color>
+    <color name="delete">#ff6b6b</color>
 </resources>

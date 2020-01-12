@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Smart Volume</string>
+    <string name="app_package_path">com.amaya.smartvolume</string>
 </resources>

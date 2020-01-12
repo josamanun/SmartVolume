@@ -33,7 +33,7 @@
                 android:textSize="40px"/>
 
             <EditText
-                android:id="@+id/et_30"
+                android:id="@+id/et_level_1"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -59,7 +59,7 @@
                 android:textSize="40px"/>
 
             <EditText
-                android:id="@+id/et_50"
+                android:id="@+id/et_level_2"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -86,7 +86,7 @@
                 android:textSize="40px"/>
 
             <EditText
-                android:id="@+id/et_70"
+                android:id="@+id/et_level_3"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -113,7 +113,7 @@
                 android:textSize="40px"/>
 
             <EditText
-                android:id="@+id/et_85"
+                android:id="@+id/et_level_4"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -140,7 +140,7 @@
                 android:textSize="40px"/>
 
             <EditText
-                android:id="@+id/et_100"
+                android:id="@+id/et_level_5"
                 android:layout_width="120px"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -152,6 +152,43 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10px"
                 android:text="km/h"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/btn_delete_values"
+                    android:layout_width="100px"
+                    android:layout_height="100px"
+                    android:src="@drawable/ic_delete"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/btn_save_values"
+                    android:layout_width="100px"
+                    android:layout_height="100px"
+                    android:src="@drawable/ic_save"
+                    />
+            </LinearLayout>
+
 
         </LinearLayout>
 

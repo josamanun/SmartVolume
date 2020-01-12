@@ -15,13 +15,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amaya.smartvolume.services.LocationService;
+import com.amaya.smartvolume.services.SharedPreferencesService;
+
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
     static DecimalFormat df;
     static DecimalFormat dfAccuracy;
 
-    static String speed_level_1_text = "speed_level_1";
-    static String speed_level_2_text= "speed_level_2";
-    static String speed_level_3_text = "speed_level_3";
-    static String speed_level_4_text = "speed_level_4";
-    static String speed_level_5_text = "speed_level_5";
+    public static String speed_level_1_text = "speed_level_1";
+    public static String speed_level_2_text= "speed_level_2";
+    public static String speed_level_3_text = "speed_level_3";
+    public static String speed_level_4_text = "speed_level_4";
+    public static String speed_level_5_text = "speed_level_5";
 
     static Integer speed_level_1 = 0;
     static Integer speed_level_2 = 0;
@@ -63,13 +69,15 @@ public class MainActivity extends AppCompatActivity {
     // UI
     private Switch switch_activate;
     private Switch switch_speed_accurate;
-    private EditText et_30;
-    private EditText et_50;
-    private EditText et_70;
-    private EditText et_85;
-    private EditText et_100;
+    private EditText et_level_1;
+    private EditText et_level_2;
+    private EditText et_level_3;
+    private EditText et_level_4;
+    private EditText et_level_5;
     static TextView tv_speed;
     static TextView tv_accuracy_speed;
+    private ImageView btn_save_values;
+    private ImageView btn_delete_values;
     // ---
 
     @Override
@@ -83,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setUI();
         setListeners();
         initializeActivity();
+        loadSharedPreferences();
 
     }
 
@@ -90,13 +99,15 @@ public class MainActivity extends AppCompatActivity {
     private void setUI() {
         switch_activate = (Switch) this.findViewById(R.id.switch_activate);
         switch_speed_accurate = (Switch) this.findViewById(R.id.switch_speed_accurate);
-        et_30 = (EditText) this.findViewById(R.id.et_30);
-        et_50 = (EditText) this.findViewById(R.id.et_50);
-        et_70 = (EditText) this.findViewById(R.id.et_70);
-        et_85 = (EditText) this.findViewById(R.id.et_85);
-        et_100 = (EditText) this.findViewById(R.id.et_100);
+        et_level_1 = (EditText) this.findViewById(R.id.et_level_1);
+        et_level_2 = (EditText) this.findViewById(R.id.et_level_2);
+        et_level_3 = (EditText) this.findViewById(R.id.et_level_3);
+        et_level_4 = (EditText) this.findViewById(R.id.et_level_4);
+        et_level_5 = (EditText) this.findViewById(R.id.et_level_5);
         tv_speed = (TextView) this.findViewById(R.id.tv_speed);
         tv_accuracy_speed = (TextView) this.findViewById(R.id.tv_accuracy_speed);
+        btn_save_values = (ImageView) this.findViewById(R.id.btn_save_values);
+        btn_delete_values = (ImageView) this.findViewById(R.id.btn_delete_values);
 
         switch_activate.setChecked(false);
         switch_speed_accurate.setChecked(false);
@@ -104,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
         switch_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
+        btn_save_values.setOnClickListener(new OnSaveValuesClickListener());
+        btn_delete_values.setOnClickListener(new OnDeleteValuesClickListener());
     }
 
     private void initializeActivity() {
@@ -116,6 +129,27 @@ public class MainActivity extends AppCompatActivity {
             // Utils
             df = new DecimalFormat("#");
             dfAccuracy = new DecimalFormat("#.##");
+    }
+
+    private void loadSharedPreferences() {
+        SharedPreferencesService.initialize(this);
+        // Load speed levels
+        if(!SharedPreferencesService.getItem(speed_level_1_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
+            et_level_1.setText(SharedPreferencesService.getItem(speed_level_1_text));
+        }
+        if(!SharedPreferencesService.getItem(speed_level_2_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
+            et_level_2.setText(SharedPreferencesService.getItem(speed_level_2_text));
+        }
+        if(!SharedPreferencesService.getItem(speed_level_3_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
+            et_level_3.setText(SharedPreferencesService.getItem(speed_level_3_text));
+        }
+        if(!SharedPreferencesService.getItem(speed_level_4_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
+            et_level_4.setText(SharedPreferencesService.getItem(speed_level_4_text));
+        }
+        if(!SharedPreferencesService.getItem(speed_level_5_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
+            et_level_5.setText(SharedPreferencesService.getItem(speed_level_5_text));
+        }
+        // ---
     }
 
     private void startLocationRequestUpdates() {
@@ -190,11 +224,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSpeedLevels() {
-        speed_level_1 = Integer.valueOf(et_30.getText().toString());
-        speed_level_2 = Integer.valueOf(et_50.getText().toString());
-        speed_level_3 = Integer.valueOf(et_70.getText().toString());
-        speed_level_4 = Integer.valueOf(et_85.getText().toString());
-        speed_level_5 = Integer.valueOf(et_100.getText().toString());
+        speed_level_1 = Integer.valueOf(et_level_1.getText().toString());
+        speed_level_2 = Integer.valueOf(et_level_2.getText().toString());
+        speed_level_3 = Integer.valueOf(et_level_3.getText().toString());
+        speed_level_4 = Integer.valueOf(et_level_4.getText().toString());
+        speed_level_5 = Integer.valueOf(et_level_5.getText().toString());
     }
 
     private void showDialog() {
@@ -209,19 +243,26 @@ public class MainActivity extends AppCompatActivity {
                 });
         alertDialog.show();
     }
+
+    private boolean checkFields() {
+        if (et_level_1.getText().length() > 0
+                && et_level_2.getText().length() > 0
+                && et_level_3.getText().length() > 0
+                && et_level_4.getText().length() > 0
+                && et_level_5.getText().length() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     // ---
 
     // Listeners
     private class OnActivateCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
-
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            if (et_30.getText().length() > 0
-                    && et_50.getText().length() > 0
-                    && et_70.getText().length() > 0
-                    && et_85.getText().length() > 0
-                    && et_100.getText().length() > 0) {
+            if (checkFields()) {
                 if (isChecked) {
                     // Activamos el servicio
                     startLocationRequestUpdates();
@@ -235,9 +276,64 @@ public class MainActivity extends AppCompatActivity {
                 showDialog();
                 switch_activate.setChecked(false);
             }
-
         }
     }
+
+    private class OnSaveValuesClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (checkFields()) {
+                // Si los campos están rellenos, se guardan en las SharedPreferences
+                HashMap<String, String> items = new HashMap<>();
+                items.put(speed_level_1_text, et_level_1.getText().toString());
+                items.put(speed_level_2_text, et_level_2.getText().toString());
+                items.put(speed_level_3_text, et_level_3.getText().toString());
+                items.put(speed_level_4_text, et_level_4.getText().toString());
+                items.put(speed_level_5_text, et_level_5.getText().toString());
+
+                Boolean result;
+                result = SharedPreferencesService.addItems(items);
+
+                if(result) {
+                    Toast.makeText(MainActivity.this, "Ajustes guardados", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                showDialog();
+            }
+        }
+    }
+
+    private class OnDeleteValuesClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("¿Eliminar ajustes guardados?");
+            alertDialog.setMessage("Para eliminar los niveles de velocidad guardados seleccione CONTINUAR");
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCELAR",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "CONTINUAR",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferencesService.clear();
+                            et_level_1.getText().clear();
+                            et_level_2.getText().clear();
+                            et_level_3.getText().clear();
+                            et_level_4.getText().clear();
+                            et_level_5.getText().clear();
+                            Toast.makeText(MainActivity.this, "Ajustes eliminados", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
+    }
+
+
     // ---
 
     // Override

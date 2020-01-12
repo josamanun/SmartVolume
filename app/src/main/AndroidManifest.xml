@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.amaya.smartvolume.LocationService" />
+        <service android:name="com.amaya.smartvolume.services.LocationService" />
     </application>
 
 </manifest>

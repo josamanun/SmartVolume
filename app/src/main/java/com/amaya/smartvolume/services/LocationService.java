@@ -1,4 +1,4 @@
-package com.amaya.smartvolume;
+package com.amaya.smartvolume.services;
 
 import android.Manifest;
 import android.app.Notification;
@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+
+import com.amaya.smartvolume.MainActivity;
+
 import static com.amaya.smartvolume.MainActivity.BROADCAST_ACTION;
 import static com.amaya.smartvolume.MainActivity.LOCATION_ACCURATE_EXTRA;
 import static com.amaya.smartvolume.MainActivity.LOCATION_EXTRA;
