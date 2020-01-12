@@ -1,4 +1,4 @@
-package com.amaya.smartvolume;
+package com.amaya.smartvolume.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,6 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -23,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
         initializeActivity();
         loadSharedPreferences();
-
     }
 
     // Functions
@@ -337,9 +340,28 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         }
     }
+
     // ---
 
     // Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_menu_settings:
+                Toast.makeText(globalActivity, "Ajustes :D", Toast.LENGTH_SHORT).show();
+                globalActivity.startActivity(new Intent(globalActivity, SettingsActivity.class));
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {

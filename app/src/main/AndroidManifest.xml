@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.amaya.smartvolume.MainActivity">
+        <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.amaya.smartvolume.services.LocationService" />
+        <service android:name=".services.LocationService" />
     </application>
 
 </manifest>

@@ -15,16 +15,16 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 
-import com.amaya.smartvolume.MainActivity;
+import com.amaya.smartvolume.activities.MainActivity;
 
-import static com.amaya.smartvolume.MainActivity.BROADCAST_ACTION;
-import static com.amaya.smartvolume.MainActivity.LOCATION_ACCURATE_EXTRA;
-import static com.amaya.smartvolume.MainActivity.LOCATION_EXTRA;
-import static com.amaya.smartvolume.MainActivity.speed_level_1_text;
-import static com.amaya.smartvolume.MainActivity.speed_level_2_text;
-import static com.amaya.smartvolume.MainActivity.speed_level_3_text;
-import static com.amaya.smartvolume.MainActivity.speed_level_4_text;
-import static com.amaya.smartvolume.MainActivity.speed_level_5_text;
+import static com.amaya.smartvolume.activities.MainActivity.BROADCAST_ACTION;
+import static com.amaya.smartvolume.activities.MainActivity.LOCATION_ACCURATE_EXTRA;
+import static com.amaya.smartvolume.activities.MainActivity.LOCATION_EXTRA;
+import static com.amaya.smartvolume.activities.MainActivity.speed_level_1_text;
+import static com.amaya.smartvolume.activities.MainActivity.speed_level_2_text;
+import static com.amaya.smartvolume.activities.MainActivity.speed_level_3_text;
+import static com.amaya.smartvolume.activities.MainActivity.speed_level_4_text;
+import static com.amaya.smartvolume.activities.MainActivity.speed_level_5_text;
 
 public class LocationService extends Service {
 
