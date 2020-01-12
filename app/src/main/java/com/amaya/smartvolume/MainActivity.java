@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     static Integer speed_level_4 = 0;
     static Integer speed_level_5 = 0;
 
+    static Double volume_level_max = 0.95;
     static Double volume_level_1 = 0.2;
     static Double volume_level_2 = 0.3;
     static Double volume_level_3 = 0.5;
@@ -194,13 +195,15 @@ public class MainActivity extends AppCompatActivity {
 
         int speed = Math.round(speedFloat);
         int maxVolume;
-        int newVolume;
+        int newVolume = -1;
+        int actualVolume;
+
         if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
             maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-            newVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+            actualVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
         } else {
             maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            newVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            actualVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         }
 
         if (speed <= speed_level_1) {
@@ -214,12 +217,14 @@ public class MainActivity extends AppCompatActivity {
         } else if (speed > speed_level_4 && speed <= speed_level_5) {
             newVolume = (int) (maxVolume * volume_level_5);
         } else if (speed > speed_level_5) {
-            newVolume = maxVolume;
+            newVolume = (int) (maxVolume * volume_level_max); //TODO: Comprobar ajuste de volumen máximo para reducirlo o no
         }
-        if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
-            audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
-        } else {
-            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+        if (newVolume != -1 && newVolume != actualVolume) {
+            if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
+                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
+            } else {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+            }
         }
     }
 
@@ -332,8 +337,6 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         }
     }
-
-
     // ---
 
     // Override
