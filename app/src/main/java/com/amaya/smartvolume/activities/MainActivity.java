@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
+import com.amaya.smartvolume.utils.Logger;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -197,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
+
+//        For testing
+//        speed = (int)(Math.random() * 100) + 0;
+
         int maxVolume;
         int newVolume = -1;
         int actualVolume;
@@ -222,11 +227,17 @@ public class MainActivity extends AppCompatActivity {
         } else if (speed > speed_level_5) {
             newVolume = (int) (maxVolume * volume_level_max); //TODO: Comprobar ajuste de volumen máximo para reducirlo o no
         }
+
+        //TODO: Añadir ajuste para permitir el registro de logs
+        Logger.logOnNote("Speed: " + speed);
+        Logger.logOnNote("New Volume: " + newVolume);
+        Logger.logOnNote("Actual Volume: " + actualVolume + "\n");
+
         if (newVolume != -1 && newVolume != actualVolume) {
             if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
                 audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
             } else {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
             }
         }
     }
