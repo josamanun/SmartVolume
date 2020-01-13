@@ -16,15 +16,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 
 import com.amaya.smartvolume.activities.MainActivity;
+import com.amaya.smartvolume.utils.Logger;
 
 import static com.amaya.smartvolume.activities.MainActivity.BROADCAST_ACTION;
 import static com.amaya.smartvolume.activities.MainActivity.LOCATION_ACCURATE_EXTRA;
 import static com.amaya.smartvolume.activities.MainActivity.LOCATION_EXTRA;
-import static com.amaya.smartvolume.activities.MainActivity.speed_level_1_text;
-import static com.amaya.smartvolume.activities.MainActivity.speed_level_2_text;
-import static com.amaya.smartvolume.activities.MainActivity.speed_level_3_text;
-import static com.amaya.smartvolume.activities.MainActivity.speed_level_4_text;
-import static com.amaya.smartvolume.activities.MainActivity.speed_level_5_text;
 
 public class LocationService extends Service {
 
@@ -37,12 +33,6 @@ public class LocationService extends Service {
     Intent intent;
 
     Notification notification;
-
-    static Integer speed_level_1;
-    static Integer speed_level_2;
-    static Integer speed_level_3;
-    static Integer speed_level_4;
-    static Integer speed_level_5;
 
     @Override
     public void onCreate() {
@@ -67,7 +57,6 @@ public class LocationService extends Service {
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             MainActivity.checkLocationPermission();
         } else {
-            setSpeedLevels(intent);
             //Location Permission already granted
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_FREQUENCY,
                     0, locationListener);
@@ -89,19 +78,11 @@ public class LocationService extends Service {
                 .setContentText("").build();
     }
 
-    private void setSpeedLevels(Intent intent) {
-        speed_level_1 = intent.getIntExtra(speed_level_1_text, 0);
-        speed_level_2 = intent.getIntExtra(speed_level_2_text, 0);
-        speed_level_3 = intent.getIntExtra(speed_level_3_text, 0);
-        speed_level_4 = intent.getIntExtra(speed_level_4_text, 0);
-        speed_level_5 = intent.getIntExtra(speed_level_5_text, 0);
-    }
-
-
     private class LocationListener implements android.location.LocationListener {
 
         @Override
         public void onLocationChanged(Location location) {
+            Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
             intent.putExtra(LOCATION_EXTRA, location.getSpeed());
             intent.putExtra(LOCATION_ACCURATE_EXTRA, location.getSpeedAccuracyMetersPerSecond());
             sendBroadcast(intent);

@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
         globalActivity = this;
 
         setUI();
+        loadSharedPreferences();
         setListeners();
         initializeActivity();
-        loadSharedPreferences();
     }
 
     // Functions
@@ -284,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
             if (checkFields()) {
                 if (isChecked) {
                     // Activamos el servicio
-                    startLocationRequestUpdates();
                     setSpeedLevels();
+                    startLocationRequestUpdates();
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
