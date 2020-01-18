@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class SharedPreferencesService {
 
-    public static String DEFAULT_ITEM_VALUE = "none";
+    public static String DEFAULT_STRING_VALUE = "none";
 
     public static SharedPreferences sharedPreferences;
 
@@ -22,11 +22,15 @@ public class SharedPreferencesService {
         return sharedPreferences.getAll();
     }
 
-    public static String getItem(String key) {
-        return sharedPreferences.getString(key, DEFAULT_ITEM_VALUE);
+    public static String getStringItem(String key) {
+        return sharedPreferences.getString(key, DEFAULT_STRING_VALUE);
     }
 
-    public static Boolean addItems(HashMap<String, String> items) {
+    public static Boolean getBooleanItem(String key, Boolean default_value) {
+        return sharedPreferences.getBoolean(key, default_value);
+    }
+
+    public static Boolean addStringItems(HashMap<String, String> items) {
         // Instanciamos el editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // Añadimos los items al editor
@@ -40,11 +44,21 @@ public class SharedPreferencesService {
         return result;
     }
 
-    public static void addItem(String key, String value) {
+    public static void addStringItem(String key, String value) {
         // Instanciamos el editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // Añadimos la clave-valor
         editor.putString(key, value);
+        // Guardamos los cambios
+        editor.commit();
+        editor.apply();
+    }
+
+    public static void addBooleanItem(String key, Boolean value) {
+        // Instanciamos el editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Añadimos la clave-valor
+        editor.putBoolean(key, value);
         // Guardamos los cambios
         editor.commit();
         editor.apply();

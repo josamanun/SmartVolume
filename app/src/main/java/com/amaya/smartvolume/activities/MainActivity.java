@@ -139,20 +139,20 @@ public class MainActivity extends AppCompatActivity {
     private void loadSharedPreferences() {
         SharedPreferencesService.initialize(this);
         // Load speed levels
-        if(!SharedPreferencesService.getItem(speed_level_1_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
-            et_level_1.setText(SharedPreferencesService.getItem(speed_level_1_text));
+        if(!SharedPreferencesService.getStringItem(speed_level_1_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
+            et_level_1.setText(SharedPreferencesService.getStringItem(speed_level_1_text));
         }
-        if(!SharedPreferencesService.getItem(speed_level_2_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
-            et_level_2.setText(SharedPreferencesService.getItem(speed_level_2_text));
+        if(!SharedPreferencesService.getStringItem(speed_level_2_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
+            et_level_2.setText(SharedPreferencesService.getStringItem(speed_level_2_text));
         }
-        if(!SharedPreferencesService.getItem(speed_level_3_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
-            et_level_3.setText(SharedPreferencesService.getItem(speed_level_3_text));
+        if(!SharedPreferencesService.getStringItem(speed_level_3_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
+            et_level_3.setText(SharedPreferencesService.getStringItem(speed_level_3_text));
         }
-        if(!SharedPreferencesService.getItem(speed_level_4_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
-            et_level_4.setText(SharedPreferencesService.getItem(speed_level_4_text));
+        if(!SharedPreferencesService.getStringItem(speed_level_4_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
+            et_level_4.setText(SharedPreferencesService.getStringItem(speed_level_4_text));
         }
-        if(!SharedPreferencesService.getItem(speed_level_5_text).equals(SharedPreferencesService.DEFAULT_ITEM_VALUE)) {
-            et_level_5.setText(SharedPreferencesService.getItem(speed_level_5_text));
+        if(!SharedPreferencesService.getStringItem(speed_level_5_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
+            et_level_5.setText(SharedPreferencesService.getStringItem(speed_level_5_text));
         }
         // ---
     }
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                 items.put(speed_level_5_text, et_level_5.getText().toString());
 
                 Boolean result;
-                result = SharedPreferencesService.addItems(items);
+                result = SharedPreferencesService.addStringItems(items);
 
                 if(result) {
                     Toast.makeText(MainActivity.this, "Ajustes guardados", Toast.LENGTH_LONG).show();
@@ -366,7 +366,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_menu_settings:
-                Toast.makeText(globalActivity, "Ajustes :D", Toast.LENGTH_SHORT).show();
                 globalActivity.startActivity(new Intent(globalActivity, SettingsActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
