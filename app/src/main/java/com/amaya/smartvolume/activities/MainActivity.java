@@ -18,10 +18,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String BROADCAST_ACTION = "JOSELITO";
     public static final String LOCATION_EXTRA = "LOCATION_EXTRA";
-    public static final String LOCATION_ACCURATE_EXTRA = "LOCATION_ACCURATE_EXTRA";
 
     static Activity globalActivity;
 
@@ -75,16 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     // UI
     private Switch switch_activate;
-    private Switch switch_speed_accurate;
     private EditText et_level_1;
     private EditText et_level_2;
     private EditText et_level_3;
     private EditText et_level_4;
     private EditText et_level_5;
     static TextView tv_speed;
-    static TextView tv_accuracy_speed;
-    private ImageView btn_save_values;
-    private ImageView btn_delete_values;
     // ---
 
     @Override
@@ -104,25 +97,18 @@ public class MainActivity extends AppCompatActivity {
     // Functions
     private void setUI() {
         switch_activate = (Switch) this.findViewById(R.id.switch_activate);
-        switch_speed_accurate = (Switch) this.findViewById(R.id.switch_speed_accurate);
         et_level_1 = (EditText) this.findViewById(R.id.et_level_1);
         et_level_2 = (EditText) this.findViewById(R.id.et_level_2);
         et_level_3 = (EditText) this.findViewById(R.id.et_level_3);
         et_level_4 = (EditText) this.findViewById(R.id.et_level_4);
         et_level_5 = (EditText) this.findViewById(R.id.et_level_5);
         tv_speed = (TextView) this.findViewById(R.id.tv_speed);
-        tv_accuracy_speed = (TextView) this.findViewById(R.id.tv_accuracy_speed);
-        btn_save_values = (ImageView) this.findViewById(R.id.btn_save_values);
-        btn_delete_values = (ImageView) this.findViewById(R.id.btn_delete_values);
 
         switch_activate.setChecked(false);
-        switch_speed_accurate.setChecked(false);
     }
 
     private void setListeners() {
         switch_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
-        btn_save_values.setOnClickListener(new OnSaveValuesClickListener());
-        btn_delete_values.setOnClickListener(new OnDeleteValuesClickListener());
     }
 
     private void initializeActivity() {
@@ -184,24 +170,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static void setSpeedText(float speedFloat, float speedAccurateFloat) {
+    public static void setSpeedText(float speedFloat) {
         if (speedFloat != -1) {
             String speed = df.format(speedFloat/3.6);
-            String accuracySpeed = dfAccuracy.format(speedAccurateFloat/3.6);
             tv_speed.setText(speed);
-            tv_accuracy_speed.setText(accuracySpeed);
         } else {
             tv_speed.setText("0");
-            tv_accuracy_speed.setText("0.00");
         }
     }
 
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
-
-//        For testing
-//        speed = (int)(Math.random() * 100) + 0;
 
         int maxVolume;
         int newVolume = -1;
@@ -296,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
-                    setSpeedText(-1, -1);
+                    setSpeedText(-1);
                 }
             } else {
                 showDialog();
@@ -305,33 +285,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class OnSaveValuesClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            if (checkFields()) {
-                // Si los campos están rellenos, se guardan en las SharedPreferences
-                HashMap<String, String> items = new HashMap<>();
-                items.put(speed_level_1_text, et_level_1.getText().toString());
-                items.put(speed_level_2_text, et_level_2.getText().toString());
-                items.put(speed_level_3_text, et_level_3.getText().toString());
-                items.put(speed_level_4_text, et_level_4.getText().toString());
-                items.put(speed_level_5_text, et_level_5.getText().toString());
-
-                Boolean result;
-                result = SharedPreferencesService.addStringItems(items);
-
-                if(result) {
-                    Toast.makeText(MainActivity.this, "Ajustes guardados", Toast.LENGTH_LONG).show();
-                }
-            } else {
-                showDialog();
-            }
-        }
-    }
-
-    private class OnDeleteValuesClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
+    private void deleteSettings() {
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
             alertDialog.setTitle("¿Eliminar ajustes guardados?");
             alertDialog.setMessage("Para eliminar los niveles de velocidad guardados seleccione CONTINUAR");
@@ -351,21 +305,40 @@ public class MainActivity extends AppCompatActivity {
                             et_level_3.getText().clear();
                             et_level_4.getText().clear();
                             et_level_5.getText().clear();
-                            Toast.makeText(MainActivity.this, "Ajustes eliminados", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Ajustes reestablecidos", Toast.LENGTH_LONG).show();
                             dialog.dismiss();
                         }
                     });
             alertDialog.show();
         }
-    }
 
+    private void saveSpeedSettings() {
+        if (checkFields()) {
+            // Si los campos están rellenos, se guardan en las SharedPreferences
+            HashMap<String, String> items = new HashMap<>();
+            items.put(speed_level_1_text, et_level_1.getText().toString());
+            items.put(speed_level_2_text, et_level_2.getText().toString());
+            items.put(speed_level_3_text, et_level_3.getText().toString());
+            items.put(speed_level_4_text, et_level_4.getText().toString());
+            items.put(speed_level_5_text, et_level_5.getText().toString());
+
+            Boolean result;
+            result = SharedPreferencesService.addStringItems(items);
+
+            if(result) {
+                Toast.makeText(MainActivity.this, "Niveles de velocidad guardados", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            showDialog();
+        }
+    }
     // ---
 
     // Override
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.settings_menu, menu);
+        inflater.inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
@@ -374,9 +347,17 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_menu_settings:
                 globalActivity.startActivity(new Intent(globalActivity, SettingsActivity.class));
+                break;
+            case R.id.item_menu_save:
+                saveSpeedSettings();
+                break;
+            case R.id.item_menu_delete_settings:
+                deleteSettings();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -412,14 +393,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             float speed = intent.getFloatExtra(LOCATION_EXTRA, 0);
-            float speedAccurate = intent.getFloatExtra(LOCATION_ACCURATE_EXTRA, 0);
-            // Check if accurate speed switch is checked to use speedAccurate
-            if (switch_speed_accurate.isChecked()) {
-                setVolumeLevel(speedAccurate);
-            } else {
-                setVolumeLevel(speed);
-            }
-            setSpeedText(speed, speedAccurate);
+            setVolumeLevel(speed);
+            setSpeedText(speed);
         }
     }
     // ---

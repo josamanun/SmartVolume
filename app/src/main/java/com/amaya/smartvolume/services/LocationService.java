@@ -19,7 +19,6 @@ import com.amaya.smartvolume.activities.MainActivity;
 import com.amaya.smartvolume.utils.Logger;
 
 import static com.amaya.smartvolume.activities.MainActivity.BROADCAST_ACTION;
-import static com.amaya.smartvolume.activities.MainActivity.LOCATION_ACCURATE_EXTRA;
 import static com.amaya.smartvolume.activities.MainActivity.LOCATION_EXTRA;
 
 public class LocationService extends Service {
@@ -84,7 +83,6 @@ public class LocationService extends Service {
         public void onLocationChanged(Location location) {
             Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
             intent.putExtra(LOCATION_EXTRA, location.getSpeed());
-            intent.putExtra(LOCATION_ACCURATE_EXTRA, location.getSpeedAccuracyMetersPerSecond());
             sendBroadcast(intent);
         }
 
