@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amaya.smartvolume.R;
+import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.Logger;
@@ -225,10 +226,16 @@ public class MainActivity extends AppCompatActivity {
         } else if (speed > speed_level_4 && speed <= speed_level_5) {
             newVolume = (int) (maxVolume * volume_level_5);
         } else if (speed > speed_level_5) {
-            newVolume = (int) (maxVolume * volume_level_max); //TODO: Comprobar ajuste de volumen máximo para reducirlo o no
+            Boolean maxVolumeEnable = SharedPreferencesService.getBooleanItem(
+                    SettingsData.max_volume_setting_id,
+                    false);
+            if(maxVolumeEnable) {
+                newVolume = maxVolume;
+            } else {
+                newVolume = (int) (maxVolume * volume_level_max);
+            }
         }
 
-        //TODO: Añadir ajuste para permitir el registro de logs
         Logger.logOnNote("Speed: " + speed);
         Logger.logOnNote("New Volume: " + newVolume);
         Logger.logOnNote("Actual Volume: " + actualVolume + "\n");

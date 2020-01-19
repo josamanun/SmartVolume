@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:text="Habilitar volumen máximo"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:maxLines="1"
             android:gravity="bottom"
             android:fontFamily="sans-serif-medium"/>
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:text="Esto puede dañar los altavoces al establecer el volumen al 100%"
-            android:textSize="14sp"
+            android:textSize="13sp"
             android:fontFamily="sans-serif-light"
             android:textColor="@color/subhead"/>
     </LinearLayout>
