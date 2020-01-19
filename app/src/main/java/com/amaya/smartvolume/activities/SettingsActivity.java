@@ -10,10 +10,12 @@ import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.adapters.SettingsListAdapter;
 import com.amaya.smartvolume.data.SettingsData;
 
-public class SettingsActivity extends Activity{
+public class SettingsActivity extends Activity {
+
+    private static String TAG = "SettingsActivity";
 
     private Activity globalActivity;
-    private ListView settingsListView;
+    private ListView lv_settings;
     private LinearLayout ll_setting_back;
 
 
@@ -32,16 +34,16 @@ public class SettingsActivity extends Activity{
 
     private void setUI() {
         ll_setting_back = (LinearLayout) this.findViewById(R.id.ll_setting_back);
-        settingsListView = (ListView) this.findViewById(R.id.lv_settings);
+        lv_settings = (ListView) this.findViewById(R.id.lv_settings);
     }
 
     private void setListView() {
-        settingsListView.setAdapter(new SettingsListAdapter(this, SettingsData.getSettings()));
-        settingsListView.setTextFilterEnabled(true); // ??
+        lv_settings.setAdapter(new SettingsListAdapter(this, SettingsData.getSettings()));
     }
 
     private void setListeners() {
         ll_setting_back.setOnClickListener(new OnBackClickListener());
+        lv_settings.setClickable(true);
     }
 
     private class OnBackClickListener implements View.OnClickListener {

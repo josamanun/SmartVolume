@@ -42,7 +42,7 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         actual_setting = values[position];
         setUI(rowView);
         setContentUI();
-        setListeners();
+        setListeners(actual_setting);
 
         return rowView;
     }
@@ -63,16 +63,22 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
                 actual_setting.getDefaultCheck()));
     }
 
-    private void setListeners() {
-        switch_setting.setOnCheckedChangeListener(new OnSwitchChangeListener());
+    private void setListeners(Setting actual_setting) {
+        switch_setting.setOnCheckedChangeListener(new OnSwitchChangeListener(actual_setting));
+
     }
 
     private class OnSwitchChangeListener implements CompoundButton.OnCheckedChangeListener {
+
+        private Setting actual_setting;
+
+        public OnSwitchChangeListener(Setting actual_setting) {
+            this.actual_setting = actual_setting;
+        }
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
             SharedPreferencesService.addBooleanItem(actual_setting.getId(), checked);
         }
     }
-
 }
