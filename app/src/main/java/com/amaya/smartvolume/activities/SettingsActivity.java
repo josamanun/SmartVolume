@@ -22,7 +22,6 @@ public class SettingsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
 
         globalActivity = this;
@@ -43,7 +42,6 @@ public class SettingsActivity extends Activity {
 
     private void setListeners() {
         ll_setting_back.setOnClickListener(new OnBackClickListener());
-        lv_settings.setClickable(true);
     }
 
     private class OnBackClickListener implements View.OnClickListener {

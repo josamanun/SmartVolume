@@ -13,8 +13,12 @@
             android:title="Ajustes"
             app:showAsAction="never" />
         <item
-            android:id="@+id/item_menu_delete_settings"
-            android:title="Reestablecer ajustes"
+            android:id="@+id/item_menu_help"
+            android:title="Ayuda"
             app:showAsAction="never" />
-     </group>
+        <item
+            android:id="@+id/item_menu_delete_settings"
+            android:title="Restablecer ajustes"
+            app:showAsAction="never" />
+    </group>
 </menu>

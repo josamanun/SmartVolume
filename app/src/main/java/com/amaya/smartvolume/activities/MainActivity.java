@@ -345,6 +345,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_menu_help:
+                globalActivity.startActivity(new Intent(globalActivity, HelpActivity.class));
+                break;
             case R.id.item_menu_settings:
                 globalActivity.startActivity(new Intent(globalActivity, SettingsActivity.class));
                 break;
