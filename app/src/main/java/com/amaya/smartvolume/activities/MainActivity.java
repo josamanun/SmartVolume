@@ -171,12 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static void setSpeedText(float speedFloat) {
-        if (speedFloat != -1) {
-            String speed = df.format(speedFloat/3.6);
-            tv_speed.setText(speed);
-        } else {
-            tv_speed.setText("0");
-        }
+        String speed = df.format(speedFloat);
+        tv_speed.setText(speed);
     }
 
     public static void setVolumeLevel(float speedFloat) {
@@ -216,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Logger.logOnNote("Speed: " + speed);
-        Logger.logOnNote("New Volume: " + newVolume);
-        Logger.logOnNote("Actual Volume: " + actualVolume + "\n");
+        Logger.logOnNote("setting.. Speed: " + speed);
+        Logger.logOnNote("setting.. New Vol: " + newVolume);
+        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
 
         if (newVolume != -1 && newVolume != actualVolume) {
             if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
@@ -276,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
-                    setSpeedText(-1);
+                    setSpeedText(0);
                 }
             } else {
                 showDialog();
@@ -395,9 +391,11 @@ public class MainActivity extends AppCompatActivity {
     private class LocationRefreshReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            float speed = intent.getFloatExtra(LOCATION_EXTRA, 0);
-            setVolumeLevel(speed);
-            setSpeedText(speed);
+            float speed = intent.getFloatExtra(LOCATION_EXTRA, -1);
+            if (speed != -1) {
+                setSpeedText(speed);
+                setVolumeLevel(speed);
+            }
         }
     }
     // ---

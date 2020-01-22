@@ -30,6 +30,11 @@ public class SharedPreferencesService {
         return sharedPreferences.getBoolean(key, default_value);
     }
 
+    public static Integer getIntegerItem(String key, Integer default_value) {
+        return sharedPreferences.getInt(key, default_value);
+    }
+
+
     public static Boolean addStringItems(HashMap<String, String> items) {
         // Instanciamos el editor
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -59,6 +64,15 @@ public class SharedPreferencesService {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // Añadimos la clave-valor
         editor.putBoolean(key, value);
+        // Guardamos los cambios
+        editor.commit();
+        editor.apply();
+    }
+    public static void addIntegerItem(String key, Integer value) {
+        // Instanciamos el editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Añadimos la clave-valor
+        editor.putInt(key, value);
         // Guardamos los cambios
         editor.commit();
         editor.apply();

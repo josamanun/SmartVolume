@@ -1,7 +1,6 @@
 package com.amaya.smartvolume.utils;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.services.SharedPreferencesService;
@@ -11,8 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.amaya.smartvolume.activities.MainActivity.TAG;
 
 public class Logger {
 
@@ -38,7 +35,6 @@ public class Logger {
                 writer.append(logMoment + sBody + "\n");
                 writer.flush();
                 writer.close();
-                Log.i(TAG, "logOnNote: Saved!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
