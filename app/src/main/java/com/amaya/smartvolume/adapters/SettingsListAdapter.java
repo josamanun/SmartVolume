@@ -83,7 +83,6 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
             default:
                 break;
-
         }
     }
 
@@ -104,7 +103,10 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
         spinner_setting.setAdapter(adapter);
         spinner_setting.setSelection(
-                SharedPreferencesService.getIntegerItem(actual_setting.getId(), 0)
+                SharedPreferencesService.getIntegerItem(
+                        actual_setting.getId(),
+                        SettingsData.DEFAULT_REFRESH_LOCATION_INDEX
+                )
         );
         spinner_setting.setOnItemSelectedListener(new OnSpinnerItemSelectedListener());
     }

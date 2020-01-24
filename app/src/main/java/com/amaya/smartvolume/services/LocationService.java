@@ -17,6 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.amaya.smartvolume.activities.MainActivity;
+import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.utils.Calculator;
 import com.amaya.smartvolume.utils.Logger;
 
@@ -26,7 +27,6 @@ import static com.amaya.smartvolume.activities.MainActivity.LOCATION_EXTRA;
 public class LocationService extends Service {
 
     private static String TAG = "LocationService";
-    private static Integer REFRESH_FREQUENCY = 500;
 
     public LocationManager locationManager;
     public LocationListener locationListener;
@@ -62,11 +62,28 @@ public class LocationService extends Service {
             MainActivity.checkLocationPermission();
         } else {
             //Location Permission already granted
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, REFRESH_FREQUENCY,
-                    0, locationListener);
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    getRefreshFrequency(),
+                    0,
+                    locationListener);
         }
         startForeground(1, notification);
         return START_STICKY;
+    }
+
+    private long getRefreshFrequency() {
+        Integer refreshIndex = SharedPreferencesService.getIntegerItem(
+                SettingsData.refresh_location_setting_id, -1);
+
+        if(refreshIndex == -1) {
+            return SettingsData.DEFAULT_REFRESH_FREQUENCY;
+        }
+
+        double refreshDoubleSeg = Double.parseDouble(
+                SettingsData.refreshLocationSegOptions.get(refreshIndex)
+        );
+        return (long) (refreshDoubleSeg*1000);
     }
 
     private void initializeForegroundNotification() {

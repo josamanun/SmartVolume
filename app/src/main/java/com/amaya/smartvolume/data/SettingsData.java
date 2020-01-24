@@ -16,7 +16,8 @@ public class SettingsData {
     public static final int SPINNER_LAYOUT = R.id.spinner_setting;
 
     public static List<String> refreshLocationSegOptions = Arrays.asList("0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0","1.2","1.5","2.0");
-
+    public static long DEFAULT_REFRESH_FREQUENCY = 500;
+    public static int DEFAULT_REFRESH_LOCATION_INDEX = 4;
 
     public static Setting[] getSettings() {
 
@@ -51,7 +52,7 @@ public class SettingsData {
     public static Setting refresh_location_setting = new Setting(
             refresh_location_setting_id ,
             "Frecuencia de localización",
-            "Puede alterar la precisión de la velocidad.",
+            "Puede alterar la precisión de la velocidad. Unidad: segundos.",
             R.drawable.ic_refesh,
             false,
             SPINNER_LAYOUT,
