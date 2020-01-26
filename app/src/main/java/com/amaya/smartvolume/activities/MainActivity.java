@@ -214,15 +214,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Logger.logOnNote("setting.. Speed: " + speed);
-        Logger.logOnNote("setting.. New Vol: " + newVolume);
-        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
 
         if (newVolume != -1 && newVolume != actualVolume) {
             // Comprobamos el nuevo volumen 2 veces para segurar
             if (nextVolume == -1 || newVolume != nextVolume) {
                 nextVolume = newVolume;
             } else {
+    //        Logger.logOnNote("setting.. Speed: " + speed);
+    //        Logger.logOnNote("setting.. New Vol: " + newVolume);
+    //        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
                 if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
                     audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
                 } else {

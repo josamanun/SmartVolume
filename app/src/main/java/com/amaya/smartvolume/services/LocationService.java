@@ -110,9 +110,12 @@ public class LocationService extends Service {
                 speed = calculateSpeed(location);
             }
 
+            Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
+
             mLastLocation = location;
             mLastLocationTime = location.getTime();
 
+            Log.i(TAG, "location.getSpeed(): " + location.getSpeed());
             Log.i(TAG, "calculateSpeed: " + speed);
             intent.putExtra(LOCATION_EXTRA, speed);
             sendBroadcast(intent);
@@ -136,12 +139,12 @@ public class LocationService extends Service {
                 Long s_time = new Double(ms_time * 0.001).longValue();
                 float speed_ms = m_distance / s_time;
 
-                Logger.logOnNote("Distance (m): " + m_distance);
-                Logger.logOnNote("Time (s): " + s_time);
-                Logger.logOnNote("Speed (m/s): " + speed_ms);
+//                Logger.logOnNote("Distance (m): " + m_distance);
+//                Logger.logOnNote("Time (s): " + s_time);
+                Logger.logOnNote("Speed (m/s): " + speed_ms+"\n");
 
                 float speed_kmh = new Double(speed_ms * 3.6).floatValue();
-                Logger.logOnNote("Speed (km/h): " + speed_kmh+ "\n");
+//                Logger.logOnNote("Speed (km/h): " + speed_kmh+ "\n");
 
                 return speed_kmh;
 
