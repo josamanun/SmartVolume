@@ -175,8 +175,6 @@ public class MainActivity extends AppCompatActivity {
         tv_speed.setText(speed);
     }
 
-    private static int nextVolume = -1; // Para doble comprobación al cambiar volumen
-
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
@@ -216,18 +214,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (newVolume != -1 && newVolume != actualVolume) {
-            // Comprobamos el nuevo volumen 2 veces para segurar
-            if (nextVolume == -1 || newVolume != nextVolume) {
-                nextVolume = newVolume;
+            if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
+                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
             } else {
-    //        Logger.logOnNote("setting.. Speed: " + speed);
-    //        Logger.logOnNote("setting.. New Vol: " + newVolume);
-    //        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
-                if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
-                    audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
-                } else {
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-                }
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
             }
         }
     }
