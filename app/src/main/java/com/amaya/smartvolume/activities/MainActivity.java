@@ -15,6 +15,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,7 +33,6 @@ import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.Logger;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -109,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
         switch_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
+        et_level_1.addTextChangedListener(new OnTextChangedListener(speed_level_1_text));
+        et_level_2.addTextChangedListener(new OnTextChangedListener(speed_level_2_text));
+        et_level_3.addTextChangedListener(new OnTextChangedListener(speed_level_3_text));
+        et_level_4.addTextChangedListener(new OnTextChangedListener(speed_level_4_text));
+        et_level_5.addTextChangedListener(new OnTextChangedListener(speed_level_5_text));
     }
 
     private void initializeActivity() {
@@ -169,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                 MY_PERMISSIONS_REQUEST_LOCATION);
     }
 
-
     public static void setSpeedText(float speedFloat) {
         String speed = df.format(speedFloat);
         tv_speed.setText(speed);
@@ -211,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
                 newVolume = (int) (maxVolume * volume_level_max);
             }
         }
-
+        Logger.logOnNote("setting.. Speed: " + speed);
+        Logger.logOnNote("setting.. New Vol: " + newVolume);
+        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
 
         if (newVolume != -1 && newVolume != actualVolume) {
             if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
@@ -278,6 +285,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class OnTextChangedListener implements TextWatcher {
+
+        private String speed_level_text;
+        public OnTextChangedListener(String speed_level_text) {
+            this.speed_level_text = speed_level_text;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence text, int start,
+                                  int before, int count) {
+            if(text.length() != 0) {
+                SharedPreferencesService.addStringItem(speed_level_text, text.toString());
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+
+        }
+    }
+
     private void deleteSettings() {
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
             alertDialog.setTitle("¿Eliminar ajustes guardados?");
@@ -304,27 +337,6 @@ public class MainActivity extends AppCompatActivity {
                     });
             alertDialog.show();
         }
-
-    private void saveSpeedSettings() {
-        if (checkFields()) {
-            // Si los campos están rellenos, se guardan en las SharedPreferences
-            HashMap<String, String> items = new HashMap<>();
-            items.put(speed_level_1_text, et_level_1.getText().toString());
-            items.put(speed_level_2_text, et_level_2.getText().toString());
-            items.put(speed_level_3_text, et_level_3.getText().toString());
-            items.put(speed_level_4_text, et_level_4.getText().toString());
-            items.put(speed_level_5_text, et_level_5.getText().toString());
-
-            Boolean result;
-            result = SharedPreferencesService.addStringItems(items);
-
-            if(result) {
-                Toast.makeText(MainActivity.this, "Niveles de velocidad guardados", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            showDialog();
-        }
-    }
     // ---
 
     // Override
@@ -343,9 +355,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.item_menu_settings:
                 globalActivity.startActivity(new Intent(globalActivity, SettingsActivity.class));
-                break;
-            case R.id.item_menu_save:
-                saveSpeedSettings();
                 break;
             case R.id.item_menu_delete_settings:
                 deleteSettings();
