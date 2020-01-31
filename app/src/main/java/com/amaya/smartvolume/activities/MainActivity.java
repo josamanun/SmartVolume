@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
     static Integer speed_level_5 = 0;
 
     static Double volume_level_max = 0.95;
-    static Double volume_level_1 = 0.2;
-    static Double volume_level_2 = 0.3;
-    static Double volume_level_3 = 0.5;
-    static Double volume_level_4 = 0.7;
-    static Double volume_level_5 = 0.85;
+    static Double volume_level_0 = 0.2;
+    static Double volume_level_1 = 0.3;
+    static Double volume_level_2 = 0.5;
+    static Double volume_level_3 = 0.7;
+    static Double volume_level_4 = 0.85;
     // ---
 
     // UI
@@ -180,54 +180,62 @@ public class MainActivity extends AppCompatActivity {
         tv_speed.setText(speed);
     }
 
+    private static int getAudioManagerMode() {
+        if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
+            return AudioManager.STREAM_VOICE_CALL;
+        } else {
+            return AudioManager.STREAM_MUSIC;
+        }
+    }
+
+    private static int getMaxVolume(int maxVolume) {
+        Boolean maxVolumeEnable = SharedPreferencesService.getBooleanItem(
+                SettingsData.max_volume_setting_id,
+                false);
+        if(maxVolumeEnable) {
+            return maxVolume;
+        } else {
+            return (int) (maxVolume * volume_level_max);
+        }
+    }
+
+    private static int getVolumeOfSpeedLevel(int speed, int maxVolume) {
+        if (speed == -1) {
+            return 0;
+        } else if (speed < speed_level_1) {
+            return (int) (maxVolume * volume_level_0);
+        } else if (speed < speed_level_2) {
+            return (int) (maxVolume * volume_level_1);
+        } else if (speed < speed_level_3) {
+            return (int) (maxVolume * volume_level_2);
+        } else if (speed < speed_level_4) {
+            return (int) (maxVolume * volume_level_3);
+        } else if (speed < speed_level_5) {
+            return (int) (maxVolume * volume_level_4);
+        } else {
+            return getMaxVolume(maxVolume);
+        }
+    }
+
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
+        int audioManagerMode = getAudioManagerMode();
+        int maxVolume = audioManager.getStreamMaxVolume(audioManagerMode);
+        int actualVolume = audioManager.getStreamVolume(audioManagerMode);
 
-        int maxVolume;
-        int newVolume = -1;
-        int actualVolume;
+        int newVolume = getVolumeOfSpeedLevel(speed, maxVolume);
 
-        if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
-            maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL);
-            actualVolume = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
-        } else {
-            maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            actualVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        }
-
-        if (speed <= speed_level_1) {
-            newVolume = (int) (maxVolume * volume_level_1);
-        } else if (speed > speed_level_1 && speed <= speed_level_2) {
-            newVolume = (int) (maxVolume * volume_level_2);
-        } else if (speed > speed_level_2 && speed <= speed_level_3) {
-            newVolume = (int) (maxVolume * volume_level_3);
-        } else if (speed > speed_level_3 && speed <= speed_level_4) {
-            newVolume = (int) (maxVolume * volume_level_4);
-        } else if (speed > speed_level_4 && speed <= speed_level_5) {
-            newVolume = (int) (maxVolume * volume_level_5);
-        } else if (speed > speed_level_5) {
-            Boolean maxVolumeEnable = SharedPreferencesService.getBooleanItem(
-                    SettingsData.max_volume_setting_id,
-                    false);
-            if(maxVolumeEnable) {
-                newVolume = maxVolume;
-            } else {
-                newVolume = (int) (maxVolume * volume_level_max);
-            }
-        }
         Logger.logOnNote("setting.. Speed: " + speed);
         Logger.logOnNote("setting.. New Vol: " + newVolume);
         Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
 
         if (newVolume != -1 && newVolume != actualVolume) {
-            if (audioManager.getMode() == AudioManager.MODE_IN_CALL) {
-                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, newVolume, 0);
-            } else {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-            }
+            audioManager.setStreamVolume(audioManagerMode, newVolume, 0);
         }
     }
+
+
 
     private void setSpeedLevels() {
         speed_level_1 = Integer.valueOf(et_level_1.getText().toString());
