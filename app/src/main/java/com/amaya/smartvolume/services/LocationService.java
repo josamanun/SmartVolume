@@ -110,7 +110,7 @@ public class LocationService extends Service {
                 speed = calculateSpeed(location);
             }
 
-            Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
+//            Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
 
             mLastLocation = location;
             mLastLocationTime = location.getTime();
@@ -122,7 +122,6 @@ public class LocationService extends Service {
         }
 
         private float calculateSpeed(Location newLocation) {
-
             try {
                 Long m_distance = Calculator.calculateDistance(
                         mLastLocation.getLatitude(), mLastLocation.getLongitude(),
@@ -131,20 +130,13 @@ public class LocationService extends Service {
 
                 // Comprobamos que la distancia recorrida es suficiente como para calcular la velocidad
                 if (m_distance < 4) {
-                    Logger.logOnNote("Distance (m): " + m_distance +"\n");
                     return 0;
                 }
 
                 Long ms_time = newLocation.getTime() - mLastLocationTime;
                 Long s_time = new Double(ms_time * 0.001).longValue();
                 float speed_ms = m_distance / s_time;
-
-//                Logger.logOnNote("Distance (m): " + m_distance);
-//                Logger.logOnNote("Time (s): " + s_time);
-                Logger.logOnNote("Speed (m/s): " + speed_ms+"\n");
-
                 float speed_kmh = new Double(speed_ms * 3.6).floatValue();
-//                Logger.logOnNote("Speed (km/h): " + speed_kmh+ "\n");
 
                 return speed_kmh;
 
@@ -155,9 +147,6 @@ public class LocationService extends Service {
                 return -1;
             }
         }
-
-
-
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {

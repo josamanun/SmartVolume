@@ -217,25 +217,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    static int nextVolume = -1;
+
     public static void setVolumeLevel(float speedFloat) {
 
         int speed = Math.round(speedFloat);
+
+        //TODO: FOR TESTING
+//        List<Integer> speeds = new ArrayList<>();
+//        speeds.add(24);
+//        speeds.add(31);
+//        speeds.add(34);
+//        speeds.add(39);
+//        speeds.add(42);
+//        speeds.add(41);
+//        Random random = new Random();
+//        int index = random.nextInt(speeds.size());
+//        speed = speeds.get(index);
+        // ---
+
         int audioManagerMode = getAudioManagerMode();
         int maxVolume = audioManager.getStreamMaxVolume(audioManagerMode);
         int actualVolume = audioManager.getStreamVolume(audioManagerMode);
-
         int newVolume = getVolumeOfSpeedLevel(speed, maxVolume);
 
         Logger.logOnNote("setting.. Speed: " + speed);
         Logger.logOnNote("setting.. New Vol: " + newVolume);
-        Logger.logOnNote("setting.. Actual Vol: " + actualVolume + "\n");
+        Logger.logOnNote("setting.. Next Vol: " + nextVolume+ "\n");
 
-        if (newVolume != -1 && newVolume != actualVolume) {
-            audioManager.setStreamVolume(audioManagerMode, newVolume, 0);
+        if (nextVolume != -1 && newVolume == nextVolume) {
+            Logger.logOnNote("-> CASO B: next = -1"+ "\n");
+            nextVolume = -1;
+            // Cambiar volumen
+            if (newVolume != actualVolume) {
+                audioManager.setStreamVolume(audioManagerMode, newVolume, 0);
+            }
+        } else {
+            Logger.logOnNote("-> CASO A: next = new"+ "\n");
+            nextVolume = newVolume;
         }
     }
-
-
 
     private void setSpeedLevels() {
         speed_level_1 = Integer.valueOf(et_level_1.getText().toString());
