@@ -17,12 +17,15 @@ import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.models.Setting;
 import com.amaya.smartvolume.services.SharedPreferencesService;
+import com.amaya.smartvolume.utils.VersionInfo;
 
 public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
     private final Context globalContext;
     private final Setting[] values;
     private Setting actual_setting;
+
+    private TextView tv_item_version;
 
     private ImageView iv_setting_icon;
     private TextView tv_setting_title;
@@ -44,9 +47,16 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         LayoutInflater inflater = (LayoutInflater) globalContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        actual_setting = values[position];
+
+        if (actual_setting.isVersion()) {
+            View rowView = inflater.inflate(R.layout.version_item_list, parent, false);
+            setVersionUI(rowView);
+            return rowView;
+        }
+
         View rowView = inflater.inflate(R.layout.settings_item_list, parent, false);
 
-        actual_setting = values[position];
         setUI(rowView);
         setContentUI();
         setListeners(actual_setting);
@@ -54,7 +64,12 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         return rowView;
     }
 
-    private void setUI(View rowView) {
+    private void setVersionUI(View rowView) {
+        tv_item_version = (TextView) rowView.findViewById(R.id.tv_item_version);
+        tv_item_version.setText(VersionInfo.getVersionCode(globalContext));
+    }
+
+    private void setUI(View rowView) {;
         iv_setting_icon = (ImageView) rowView.findViewById(R.id.iv_setting_icon);
         tv_setting_title = (TextView) rowView.findViewById(R.id.tv_setting_title);
         tv_setting_subhead = (TextView) rowView.findViewById(R.id.tv_setting_subhead);

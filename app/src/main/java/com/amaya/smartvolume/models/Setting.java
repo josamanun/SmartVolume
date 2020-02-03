@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Setting {
 
+    private boolean isVersion = false;
+
     private String id;
     private String title;
     private String subhead;
@@ -12,6 +14,10 @@ public class Setting {
     private int layout;
 
     private List<String> spinnerItems;
+
+    public Setting(boolean isVersion) {
+        this.isVersion = isVersion;
+    }
 
     public Setting(String id, String title, String subhead, int icon, boolean defaultCheck,
                    int layout) {
@@ -32,6 +38,10 @@ public class Setting {
         this.defaultCheck = defaultCheck;
         this.layout = layout;
         this.spinnerItems = spinnerItems;
+    }
+
+    public boolean isVersion() {
+        return isVersion;
     }
 
     public String getId() {

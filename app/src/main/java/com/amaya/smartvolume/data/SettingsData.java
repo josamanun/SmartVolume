@@ -24,11 +24,13 @@ public class SettingsData {
         Setting[] settings = {
                 max_volume_setting,
                 enable_log_setting,
-                refresh_location_setting
+                refresh_location_setting,
+                version_setting // Version always last
         };
         return settings;
     }
 
+    public static Setting version_setting = new Setting(true);
 
     public static Setting max_volume_setting = new Setting(
             max_volume_setting_id,
