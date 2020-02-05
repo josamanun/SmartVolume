@@ -6,6 +6,12 @@ public class Setting {
 
     private boolean isVersion = false;
 
+    public boolean isRestore() {
+        return isRestore;
+    }
+
+    private boolean isRestore= false;
+
     private String id;
     private String title;
     private String subhead;
@@ -14,6 +20,11 @@ public class Setting {
     private int layout;
 
     private List<String> spinnerItems;
+
+    public Setting(boolean isRestore, String title) {
+        this.isRestore = isRestore;
+        this.title = title;
+    }
 
     public Setting(boolean isVersion) {
         this.isVersion = isVersion;
