@@ -19,7 +19,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.HelpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>

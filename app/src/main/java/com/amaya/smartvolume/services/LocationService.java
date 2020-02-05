@@ -16,13 +16,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.amaya.smartvolume.activities.MainActivity;
 import com.amaya.smartvolume.data.SettingsData;
+import com.amaya.smartvolume.fragments.HomeFragment;
 import com.amaya.smartvolume.utils.Calculator;
 import com.amaya.smartvolume.utils.Logger;
 
-import static com.amaya.smartvolume.activities.MainActivity.BROADCAST_ACTION;
-import static com.amaya.smartvolume.activities.MainActivity.LOCATION_EXTRA;
+import static com.amaya.smartvolume.fragments.HomeFragment.BROADCAST_ACTION;
+import static com.amaya.smartvolume.fragments.HomeFragment.LOCATION_EXTRA;
 
 public class LocationService extends Service {
 
@@ -59,7 +59,7 @@ public class LocationService extends Service {
         // Check for location permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            MainActivity.checkLocationPermission();
+            HomeFragment.checkLocationPermission();
         } else {
             //Location Permission already granted
             locationManager.requestLocationUpdates(
