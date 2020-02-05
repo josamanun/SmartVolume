@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainActivity">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".activities.MainActivity">
+    android:paddingBottom="42dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_marginTop="36dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Smart Volume"
+            android:textSize="48sp"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/logo"
+            android:gravity="center_horizontal|center_vertical"
+            />
+    </LinearLayout>
 
 
     <Switch
         android:id="@+id/switch_activate"
         android:layout_width="600px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100px"
+        android:layout_marginTop="32dp"
         android:text="Activar"
         android:textSize="60px"/>
 
@@ -211,3 +233,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</ScrollView>
