@@ -16,11 +16,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.fragments.HomeFragment;
 import com.amaya.smartvolume.utils.Calculator;
 import com.amaya.smartvolume.utils.Logger;
 
+import static com.amaya.smartvolume.data.DataGenerator.getFrequency;
 import static com.amaya.smartvolume.fragments.HomeFragment.BROADCAST_ACTION;
 import static com.amaya.smartvolume.fragments.HomeFragment.LOCATION_EXTRA;
 
@@ -73,17 +73,7 @@ public class LocationService extends Service {
     }
 
     private long getRefreshFrequency() {
-        Integer refreshIndex = SharedPreferencesService.getIntegerItem(
-                SettingsData.refresh_location_setting_id, -1);
-
-        if(refreshIndex == -1) {
-            return SettingsData.DEFAULT_REFRESH_FREQUENCY;
-        }
-
-        double refreshDoubleSeg = Double.parseDouble(
-                SettingsData.refreshLocationSegOptions.get(refreshIndex)
-        );
-        return (long) (refreshDoubleSeg*1000);
+        return (long) (getFrequency()*1000);
     }
 
     private void initializeForegroundNotification() {
@@ -109,8 +99,6 @@ public class LocationService extends Service {
             if (mLastLocation != null && mLastLocationTime != null) {
                 speed = calculateSpeed(location);
             }
-
-//            Logger.logOnNote("location.getSpeed(): " + location.getSpeed());
 
             mLastLocation = location;
             mLastLocationTime = location.getTime();

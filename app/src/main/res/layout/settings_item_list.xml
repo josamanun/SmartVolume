@@ -1,80 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="72dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/ll_setting_icon"
+                android:layout_width="74dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/iv_setting_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_save"/>
+                <ImageView
+                    android:id="@+id/iv_setting_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_save"/>
 
-    </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_setting_text"
+                android:layout_width="74dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_setting_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="100%"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:fontFamily="@font/title_1"
+                    android:gravity="center_horizontal|center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="100"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_setting_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Habilitar volumen máximo"
+                        android:textSize="17sp"
+                        android:gravity="bottom"
+                        android:fontFamily="sans-serif-medium"/>
 
 
-    <LinearLayout
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_setting_subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Esto puede dañar los altavoces al establecer el volumen al 100%"
+                        android:textSize="13sp"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="@color/subhead"/>
+                </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_setting_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Habilitar volumen máximo"
-            android:textSize="17sp"
-            android:gravity="bottom"
-            android:fontFamily="sans-serif-medium"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="75"
+                    android:gravity="right"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_switch_setting"
+                        android:layout_width="72dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <Switch
+                            android:id="@+id/switch_setting"
+                            android:layout_width="48dp"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_spinner_setting"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <Spinner
+                            android:id="@+id/spinner_setting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:textAlignment="center"
+                            android:gravity="center_horizontal"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/tv_setting_subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Esto puede dañar los altavoces al establecer el volumen al 100%"
-            android:textSize="13sp"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/subhead"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_switch_setting"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="visible">
 
-        <Switch
-            android:id="@+id/switch_setting"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_spinner_setting"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <Spinner
-            android:id="@+id/spinner_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAlignment="center"
-            android:gravity="center_horizontal"/>
-
-    </LinearLayout>
 
 </LinearLayout>
+

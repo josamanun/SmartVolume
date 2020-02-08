@@ -11,21 +11,17 @@ import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.activities.HelpActivity;
@@ -33,7 +29,12 @@ import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.Logger;
 
-import java.text.DecimalFormat;
+import static com.amaya.smartvolume.data.DataGenerator.format0;
+import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel1;
+import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel2;
+import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel3;
+import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel4;
+import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel5;
 
 public class HomeFragment extends Fragment {
 
@@ -57,20 +58,12 @@ public class HomeFragment extends Fragment {
     public static Integer speed_level_4 = 0;
     public static Integer speed_level_5 = 0;
 
-    static DecimalFormat df;
-    static DecimalFormat dfAccuracy;
-
     static Intent locationIntent;
     BroadcastReceiver locationRefreshReceiver;
     static AudioManager audioManager;
 
     // UI
-    private Switch switch_activate;
-    public static EditText et_level_1;
-    public static EditText et_level_2;
-    public static EditText et_level_3;
-    public static EditText et_level_4;
-    public static EditText et_level_5;
+    private ToggleButton tb_activate;
     static TextView tv_speed;
     private LinearLayout ll_help;
 
@@ -93,7 +86,7 @@ public class HomeFragment extends Fragment {
         globalFragmentActivity = this.getActivity();
 
         setUI(view);
-        loadSharedPreferences();
+        SharedPreferencesService.initialize(globalContext);
         setListeners();
         initializeFragment();
 
@@ -101,46 +94,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void setUI(View view) {
-        switch_activate = (Switch) view.findViewById(R.id.switch_activate);
-        et_level_1 = (EditText) view.findViewById(R.id.et_level_1);
-        et_level_2 = (EditText) view.findViewById(R.id.et_level_2);
-        et_level_3 = (EditText) view.findViewById(R.id.et_level_3);
-        et_level_4 = (EditText) view.findViewById(R.id.et_level_4);
-        et_level_5 = (EditText) view.findViewById(R.id.et_level_5);
+        tb_activate = (ToggleButton) view.findViewById(R.id.tb_activate);
         tv_speed = (TextView) view.findViewById(R.id.tv_speed);
         ll_help = (LinearLayout) view.findViewById(R.id.ll_help);
 
-        switch_activate.setChecked(false);
-    }
-
-    private void loadSharedPreferences() {
-        SharedPreferencesService.initialize(globalContext);
-        // Load speed levels
-        if(!SharedPreferencesService.getStringItem(speed_level_1_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
-            et_level_1.setText(SharedPreferencesService.getStringItem(speed_level_1_text));
-        }
-        if(!SharedPreferencesService.getStringItem(speed_level_2_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
-            et_level_2.setText(SharedPreferencesService.getStringItem(speed_level_2_text));
-        }
-        if(!SharedPreferencesService.getStringItem(speed_level_3_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
-            et_level_3.setText(SharedPreferencesService.getStringItem(speed_level_3_text));
-        }
-        if(!SharedPreferencesService.getStringItem(speed_level_4_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
-            et_level_4.setText(SharedPreferencesService.getStringItem(speed_level_4_text));
-        }
-        if(!SharedPreferencesService.getStringItem(speed_level_5_text).equals(SharedPreferencesService.DEFAULT_STRING_VALUE)) {
-            et_level_5.setText(SharedPreferencesService.getStringItem(speed_level_5_text));
-        }
-        // ---
+        tb_activate.setChecked(false);
     }
 
     private void setListeners() {
-        switch_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
-        et_level_1.addTextChangedListener(new OnTextChangedListener(speed_level_1_text));
-        et_level_2.addTextChangedListener(new OnTextChangedListener(speed_level_2_text));
-        et_level_3.addTextChangedListener(new OnTextChangedListener(speed_level_3_text));
-        et_level_4.addTextChangedListener(new OnTextChangedListener(speed_level_4_text));
-        et_level_5.addTextChangedListener(new OnTextChangedListener(speed_level_5_text));
+        tb_activate.setOnCheckedChangeListener(new OnActivateCheckedChangeListener());
         ll_help.setOnClickListener(new OnHelpClickListener());
     }
 
@@ -150,9 +112,6 @@ public class HomeFragment extends Fragment {
         audioManager = (AudioManager) globalFragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
         locationIntent = new Intent(globalContext, LocationService.class);
-        // Utils
-        df = new DecimalFormat("#");
-        dfAccuracy = new DecimalFormat("#.##");
     }
 
     // Listeners
@@ -160,46 +119,22 @@ public class HomeFragment extends Fragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            if (checkFields()) {
-                if (isChecked) {
-                    // Activamos el servicio
-                    setSpeedLevels();
+            if (isChecked) {
+                setSpeedLevels();
+                if (checkSpeedOrder()) {
                     startLocationRequestUpdates();
+                    Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Desactivamos el servicio
-                    stopLocationRequestUpdates();
-                    setSpeedText(0);
+                    showDialog();
+                    tb_activate.setChecked(false);
                 }
+                // Activamos el servicio
             } else {
-                showDialog();
-                switch_activate.setChecked(false);
+                // Desactivamos el servicio
+                stopLocationRequestUpdates();
+                Toast.makeText(globalContext, "GPS desactivado", Toast.LENGTH_SHORT).show();
+                setSpeedText(0);
             }
-        }
-    }
-
-    private class OnTextChangedListener implements TextWatcher {
-        private String speed_level_text;
-
-        public OnTextChangedListener(String speed_level_text) {
-            this.speed_level_text = speed_level_text;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence text, int start,
-                                  int before, int count) {
-            if(text.length() != 0) {
-                SharedPreferencesService.addStringItem(speed_level_text, text.toString());
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
         }
     }
 
@@ -213,12 +148,12 @@ public class HomeFragment extends Fragment {
     // ---
 
     // Functions
-    private boolean checkFields() {
-        if (et_level_1.getText().length() > 0
-                && et_level_2.getText().length() > 0
-                && et_level_3.getText().length() > 0
-                && et_level_4.getText().length() > 0
-                && et_level_5.getText().length() > 0) {
+    private boolean checkSpeedOrder() {
+        if (speed_level_1 < speed_level_2
+            && speed_level_2 < speed_level_3
+            && speed_level_3 < speed_level_4
+            && speed_level_4 < speed_level_5
+        ) {
             return true;
         } else {
             return false;
@@ -226,15 +161,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void setSpeedLevels() {
-        speed_level_1 = Integer.valueOf(et_level_1.getText().toString());
-        speed_level_2 = Integer.valueOf(et_level_2.getText().toString());
-        speed_level_3 = Integer.valueOf(et_level_3.getText().toString());
-        speed_level_4 = Integer.valueOf(et_level_4.getText().toString());
-        speed_level_5 = Integer.valueOf(et_level_5.getText().toString());
+        speed_level_1 = getSpeedLevel1();
+        speed_level_2 = getSpeedLevel2();
+        speed_level_3 = getSpeedLevel3();
+        speed_level_4 = getSpeedLevel4();
+        speed_level_5 = getSpeedLevel5();
     }
 
     public static void setSpeedText(float speedFloat) {
-        String speed = df.format(speedFloat);
+        String speed = format0.format(speedFloat);
         tv_speed.setText(speed);
     }
 
@@ -267,8 +202,8 @@ public class HomeFragment extends Fragment {
 
     private void showDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(globalContext).create();
-        alertDialog.setTitle("Los campos están vacíos");
-        alertDialog.setMessage("Debe introducir los niveles de velocidad");
+        alertDialog.setTitle("Comprueba los niveles de volumen");
+        alertDialog.setMessage("Los niveles de volumen deben establecerse de menor a mayor velocidad en Ajustes.");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -281,20 +216,6 @@ public class HomeFragment extends Fragment {
     static int nextVolume = -1;
     public static void setVolumeLevel(float speedFloat) {
         int speed = Math.round(speedFloat);
-
-        //TODO: FOR TESTING
-//        List<Integer> speeds = new ArrayList<>();
-//        speeds.add(24);
-//        speeds.add(31);
-//        speeds.add(34);
-//        speeds.add(39);
-//        speeds.add(42);
-//        speeds.add(41);
-//        Random random = new Random();
-//        int index = random.nextInt(speeds.size());
-//        speed = speeds.get(index);
-        // ---
-
         int audioManagerMode = com.amaya.smartvolume.utils.
                 AudioManager.getAudioManagerMode(audioManager);
         int maxVolume = audioManager.getStreamMaxVolume(audioManagerMode);
@@ -304,7 +225,7 @@ public class HomeFragment extends Fragment {
 
         Logger.logOnNote("Speed: " + speed);
         Logger.logOnNote("New Vol: " + newVolume);
-        Logger.logOnNote("Next Vol: " + nextVolume + "\n");
+        Logger.logOnNote("Next Vol: " + nextVolume);
 
         if (nextVolume != -1 && newVolume == nextVolume) {
             Logger.logOnNote("-> CASO B: next = -1" + "\n");
@@ -333,7 +254,6 @@ public class HomeFragment extends Fragment {
     }
     // ---
 
-
     // Overrides
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -343,9 +263,10 @@ public class HomeFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationRequestUpdates();
+                    Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(globalContext, "Es necesario aceptar los permisos", Toast.LENGTH_LONG).show();
-                    switch_activate.setChecked(false);
+                    tb_activate.setChecked(false);
                 }
                 return;
             }

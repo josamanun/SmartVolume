@@ -23,11 +23,9 @@ import com.amaya.smartvolume.models.Setting;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.VersionInfo;
 
-import static com.amaya.smartvolume.fragments.HomeFragment.et_level_1;
-import static com.amaya.smartvolume.fragments.HomeFragment.et_level_2;
-import static com.amaya.smartvolume.fragments.HomeFragment.et_level_3;
-import static com.amaya.smartvolume.fragments.HomeFragment.et_level_4;
-import static com.amaya.smartvolume.fragments.HomeFragment.et_level_5;
+import static com.amaya.smartvolume.data.SettingsData.SETTING_HEADER_TYPE;
+import static com.amaya.smartvolume.data.SettingsData.SETTING_RESTORE_TYPE;
+import static com.amaya.smartvolume.data.SettingsData.SETTING_VERSION_TYPE;
 
 public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
@@ -35,16 +33,20 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
     private final Setting[] values;
     private Setting actual_setting;
 
+    private TextView tv_header_separator;
     private TextView tv_item_version;
+    private TextView tv_setting_restore;
 
     private ImageView iv_setting_icon;
+    private TextView tv_setting_text;
     private TextView tv_setting_title;
     private TextView tv_setting_subhead;
     private Switch switch_setting;
     private Spinner spinner_setting;
     private LinearLayout ll_spinner_setting;
     private LinearLayout ll_switch_setting;
-    private TextView tv_setting_restore;
+    private LinearLayout ll_setting_text;
+    private LinearLayout ll_setting_icon;
 
     public SettingsListAdapter(Context context, Setting[] values) {
         super(context, R.layout.settings_item_list, values);
@@ -60,17 +62,28 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
         actual_setting = values[position];
 
-        if (actual_setting.isVersion()) {
-            View rowView = inflater.inflate(R.layout.version_item_list, parent, false);
-            setVersionUI(rowView);
-            return rowView;
+        if (actual_setting.getType() != null) {
+            switch (actual_setting.getType()) {
+                case SETTING_HEADER_TYPE:
+                    View headerView = inflater.inflate(R.layout.setting_header_list, parent, false);
+                    setHeaderUI(headerView);
+                    return headerView;
+
+                case SETTING_RESTORE_TYPE:
+                    View restoreView = inflater.inflate(R.layout.restore_setting_item_list, parent, false);
+                    setRestoreUI(restoreView);
+                    return restoreView;
+
+                case SETTING_VERSION_TYPE:
+                    View versionView = inflater.inflate(R.layout.version_item_list, parent, false);
+                    setVersionUI(versionView);
+                    return versionView;
+
+                default:
+                    break;
+            }
         }
 
-        if (actual_setting.isRestore()) {
-            View rowView = inflater.inflate(R.layout.restore_setting_item_list, parent, false);
-            setRestoreUI(rowView);
-            return rowView;
-        }
         View rowView = inflater.inflate(R.layout.settings_item_list, parent, false);
 
         setUI(rowView);
@@ -78,6 +91,12 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         setListeners(actual_setting);
 
         return rowView;
+    }
+
+    // Initialize
+    private void setHeaderUI(View headerView) {
+        tv_header_separator = (TextView) headerView.findViewById(R.id.tv_header_separator);
+        tv_header_separator.setText(actual_setting.getTitle());
     }
 
     private void setRestoreUI(View rowView) {
@@ -93,6 +112,7 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
     }
 
     private void setUI(View rowView) {;
+        tv_setting_text = (TextView) rowView.findViewById(R.id.tv_setting_text);
         iv_setting_icon = (ImageView) rowView.findViewById(R.id.iv_setting_icon);
         tv_setting_title = (TextView) rowView.findViewById(R.id.tv_setting_title);
         tv_setting_subhead = (TextView) rowView.findViewById(R.id.tv_setting_subhead);
@@ -100,14 +120,27 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         spinner_setting = (Spinner) rowView.findViewById(R.id.spinner_setting);
         ll_spinner_setting = (LinearLayout) rowView.findViewById(R.id.ll_spinner_setting);
         ll_switch_setting = (LinearLayout) rowView.findViewById(R.id.ll_switch_setting);
+        ll_setting_icon = (LinearLayout) rowView.findViewById(R.id.ll_setting_icon);
+        ll_setting_text = (LinearLayout) rowView.findViewById(R.id.ll_setting_text);
     }
 
     private void setContentUI() {
-        iv_setting_icon.setImageResource(actual_setting.getIcon());
         tv_setting_title.setText(actual_setting.getTitle());
         tv_setting_subhead.setText(actual_setting.getSubhead());
 
-        switch (actual_setting.getLayout()) {
+        switch (actual_setting.getLeftLayout()) {
+            case SettingsData.ICON_LAYOUT:
+                loadIcon();
+                showIcon();
+                break;
+            case SettingsData.TEXT_LAYOUT:
+                loadText();
+                showText();
+            default:
+                break;
+        }
+
+        switch (actual_setting.getRightLayout()) {
             case SettingsData.SWITCH_LAYOUT:
                 loadSwitch();
                 showSwitch();
@@ -121,11 +154,41 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         }
     }
 
+    private void setListeners(Setting actual_setting) {
+        switch_setting.setOnCheckedChangeListener(new OnSwitchChangeListener(actual_setting));
+
+    }
+    // ---
+
+    // Functions
+    private void loadIcon() {
+        iv_setting_icon.setImageResource(actual_setting.getIcon());
+    }
+
+    private void showIcon() {
+        ll_setting_icon.setVisibility(View.VISIBLE);
+        ll_setting_text.setVisibility(View.GONE);
+    }
+
+    private void loadText() {
+        tv_setting_text.setText(actual_setting.getText());
+    }
+
+    private void showText() {
+        ll_setting_text.setVisibility(View.VISIBLE);
+        ll_setting_icon.setVisibility(View.GONE);
+    }
+
     private void loadSwitch() {
         switch_setting.setChecked(
                 SharedPreferencesService.getBooleanItem(actual_setting.getId(),
                         actual_setting.getDefaultCheck()));
         switch_setting.setOnCheckedChangeListener(new OnSwitchChangeListener(actual_setting));
+    }
+
+    private void showSwitch() {
+        ll_switch_setting.setVisibility(View.VISIBLE);
+        ll_spinner_setting.setVisibility(View.GONE);
     }
 
     private void loadSpinner() {
@@ -140,20 +203,10 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
         spinner_setting.setSelection(
                 SharedPreferencesService.getIntegerItem(
                         actual_setting.getId(),
-                        SettingsData.DEFAULT_REFRESH_LOCATION_INDEX
+                        actual_setting.getDefualtValueIndex()
                 )
         );
-        spinner_setting.setOnItemSelectedListener(new OnSpinnerItemSelectedListener());
-    }
-
-    private void setListeners(Setting actual_setting) {
-        switch_setting.setOnCheckedChangeListener(new OnSwitchChangeListener(actual_setting));
-
-    }
-
-    private void showSwitch() {
-        ll_switch_setting.setVisibility(View.VISIBLE);
-        ll_spinner_setting.setVisibility(View.GONE);
+        spinner_setting.setOnItemSelectedListener(new OnSpinnerItemSelectedListener(actual_setting));
     }
 
     private void showSpinner() {
@@ -176,11 +229,6 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferencesService.clear();
-                        et_level_1.getText().clear();
-                        et_level_2.getText().clear();
-                        et_level_3.getText().clear();
-                        et_level_4.getText().clear();
-                        et_level_5.getText().clear();
                         notifyDataSetChanged();
                         Toast.makeText(globalContext, "Ajustes restablecidos", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
@@ -206,6 +254,12 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
     }
 
     private class OnSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        private Setting actual_setting;
+
+        public OnSpinnerItemSelectedListener(Setting actual_setting) {
+            this.actual_setting = actual_setting;
+        }
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {

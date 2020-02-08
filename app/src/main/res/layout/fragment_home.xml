@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="48dp"
         android:gravity="center_horizontal">
 
         <LinearLayout
@@ -24,182 +21,63 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="36dp"
                     android:text="Smart Volume"
-                    android:textSize="48sp"
+                    android:textSize="52sp"
                     android:textColor="@color/colorPrimary"
-                    android:fontFamily="@font/logo"
+                    android:fontFamily="@font/title_1"
                     android:gravity="center_horizontal|center_vertical"
                     />
                 <LinearLayout
-                    android:id="@+id/ll_help"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="18dp"
                     android:gravity="right"
                     android:orientation="vertical">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:tint="@color/colorGrey"
-                        android:src="@drawable/ic_help"/>
+                    <LinearLayout
+                        android:id="@+id/ll_help"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:tint="@color/colorGrey"
+                            android:src="@drawable/ic_help"/>
+                    </LinearLayout>
                 </LinearLayout>
 
             </RelativeLayout>
 
         </LinearLayout>
 
-        <Switch
-            android:id="@+id/switch_activate"
-            android:layout_width="600px"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Activar"
-            android:textSize="60px"/>
-
         <LinearLayout
-            android:layout_width="600px"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="300px"
-                    android:layout_height="wrap_content"
-                    android:text="Volumen 30%:"
-                    android:textSize="40px"/>
+            <ToggleButton
+                android:id="@+id/tb_activate"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                style="@style/toggleButton"
+                android:background="@drawable/ic_toggle_bg"/>
 
-                <EditText
-                    android:id="@+id/et_level_1"
-                    android:layout_width="120px"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:hint="20"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10px"
-                    android:text="km/h"/>
+        </LinearLayout>
 
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:layout_marginTop="36dp"
+            android:orientation="vertical"
+            android:visibility="invisible">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="300px"
-                    android:layout_height="wrap_content"
-                    android:text="Volumen 50%:"
-                    android:textSize="40px"/>
-
-                <EditText
-                    android:id="@+id/et_level_2"
-                    android:layout_width="120px"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:hint="35"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10px"
-                    android:text="km/h"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="300px"
-                    android:layout_height="wrap_content"
-                    android:text="Volumen 70%:"
-                    android:textSize="40px"/>
-
-                <EditText
-                    android:id="@+id/et_level_3"
-                    android:layout_width="120px"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:hint="50"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10px"
-                    android:text="km/h"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="300px"
-                    android:layout_height="wrap_content"
-                    android:text="Volumen 85%:"
-                    android:textSize="40px"/>
-
-                <EditText
-                    android:id="@+id/et_level_4"
-                    android:layout_width="120px"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:hint="65"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10px"
-                    android:text="km/h"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="300px"
-                    android:layout_height="wrap_content"
-                    android:text="Volumen 100%:"
-                    android:textSize="40px"/>
-
-                <EditText
-                    android:id="@+id/et_level_5"
-                    android:layout_width="120px"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:hint="80"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10px"
-                    android:text="km/h"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="70dp"
+                android:gravity="bottom"
                 android:orientation="vertical"
                 android:background="@drawable/border_simple">
 
@@ -246,5 +124,4 @@
 
         </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+    </RelativeLayout>

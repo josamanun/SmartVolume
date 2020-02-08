@@ -11,20 +11,22 @@
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="52dp"/>
 
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
         app:itemBackground="@color/colorPrimary"
         android:foreground="?attr/selectableItemBackground"
-        app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
+        app:itemIconTint="@color/icon_selector_color"
+        app:itemTextColor="@color/icon_selector_color"
         app:menu="@menu/toolbar_menu"
+        app:labelVisibilityMode="unlabeled"
         />
 
 </android.support.design.widget.CoordinatorLayout>
