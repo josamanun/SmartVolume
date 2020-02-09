@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorPrimary">
+    <item>
+        <selector xmlns:android="http://schemas.android.com/apk/res/android">
+            <!-- Pressed -->
+            <item
+                android:drawable="@drawable/toggle_on"
+                android:state_pressed="true"/>
+            <!-- Not Pressed -->
+            <!-- Selected -->
+            <item
+                android:drawable="@drawable/toggle_on"
+                android:state_selected="true"/>
+            <!-- Focus -->
+            <item
+                android:drawable="@drawable/toggle_on"
+                android:state_focused="true"/>
+            <!-- Default -->
+            <item android:drawable="@android:color/transparent"/>
+        </selector>
+    </item>
+</ripple>

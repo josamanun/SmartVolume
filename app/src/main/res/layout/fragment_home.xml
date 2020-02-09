@@ -1,127 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="36dp"
+                android:text="Smart Volume"
+                android:textSize="52sp"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="@font/title_1"
+                android:gravity="center_horizontal|center_vertical"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:gravity="right"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/ll_help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:tint="@color/colorGrey"
+                        android:src="@drawable/ic_help"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical">
+
+        <ToggleButton
+            android:id="@+id/tb_activate"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            style="@style/toggleButton"
+            android:background="@drawable/ic_toggle_bg"
+            android:foreground="@drawable/ripple"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:layout_marginTop="36dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="108dp"
-            android:orientation="horizontal">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="36dp"
-                    android:text="Smart Volume"
-                    android:textSize="52sp"
-                    android:textColor="@color/colorPrimary"
-                    android:fontFamily="@font/title_1"
-                    android:gravity="center_horizontal|center_vertical"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="18dp"
-                    android:gravity="right"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:id="@+id/ll_help"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:tint="@color/colorGrey"
-                            android:src="@drawable/ic_help"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="vertical">
-
-            <ToggleButton
-                android:id="@+id/tb_activate"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                style="@style/toggleButton"
-                android:background="@drawable/ic_toggle_bg"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
             android:gravity="bottom"
-            android:layout_marginTop="36dp"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:background="@drawable/border_simple">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80px"
+                android:layout_marginTop="20px"
+                android:text="Velocidad"
+                android:textSize="50px"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="sans-serif-medium"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="70dp"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                android:background="@drawable/border_simple">
+                android:layout_height="200px"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_speed"
                     android:layout_width="match_parent"
-                    android:layout_height="80px"
-                    android:layout_marginTop="20px"
-                    android:text="Velocidad"
-                    android:textSize="50px"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorPrimary"
-                    android:fontFamily="sans-serif-medium"/>
-
-                <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_weight="55"
+                    android:text="0"
+                    android:textSize="90px"
+                    android:textAlignment="viewEnd"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorAccent"
+                    tools:ignore="RtlCompat" />
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="200px"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_speed"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="55"
-                        android:text="0"
-                        android:textSize="90px"
-                        android:textAlignment="viewEnd"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/colorAccent"
-                        tools:ignore="RtlCompat" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="45"
-                        android:layout_marginLeft="20px"
-                        android:text="km/h"
-                        android:textSize="70px"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/colorAccent"/>
-                </LinearLayout>
-
-
+                    android:layout_height="match_parent"
+                    android:layout_weight="45"
+                    android:layout_marginLeft="20px"
+                    android:text="km/h"
+                    android:textSize="70px"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorAccent"/>
             </LinearLayout>
+
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
