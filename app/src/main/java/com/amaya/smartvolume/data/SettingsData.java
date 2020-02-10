@@ -24,7 +24,7 @@ public class SettingsData {
     public static String speed_level_4_id = "speed_level_4";
     public static String speed_level_5_id = "speed_level_5";
     public static String max_volume_setting_id = "setting_max_volume";
-    public static String setting_enable_log_id = "setting_enable_log";
+    public static final String setting_enable_log_id = "setting_enable_log";
     public static String refresh_frequency_setting_id = "refresh_frequency_setting ";
 
     public static final int ICON_LAYOUT = R.id.iv_setting_icon;

@@ -1,8 +1,10 @@
 package com.amaya.smartvolume.adapters;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +19,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.models.Setting;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.VersionInfo;
 
+import static com.amaya.smartvolume.activities.MainActivity.checkStoragePermission;
 import static com.amaya.smartvolume.data.SettingsData.SETTING_HEADER_TYPE;
 import static com.amaya.smartvolume.data.SettingsData.SETTING_RESTORE_TYPE;
 import static com.amaya.smartvolume.data.SettingsData.SETTING_VERSION_TYPE;
@@ -236,9 +241,15 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
                 });
         alertDialog.show();
     }
+
+    public static void setLogSettingChecked() {
+        compound_log_switch.setChecked(true);
+        SharedPreferencesService.addBooleanItem(SettingsData.setting_enable_log_id, true);
+    }
     // ---
 
     // Listeners
+    public static CompoundButton compound_log_switch;
     private class OnSwitchChangeListener implements CompoundButton.OnCheckedChangeListener {
 
         private Setting actual_setting;
@@ -249,9 +260,20 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-            SharedPreferencesService.addBooleanItem(actual_setting.getId(), checked);
+
+            if (actual_setting.getId().equals(SettingsData.setting_enable_log_id) &&
+                    // Comprobar permisos de escritura
+                    ActivityCompat.checkSelfPermission(globalContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                compoundButton.setChecked(false);
+                compound_log_switch = compoundButton;
+                checkStoragePermission();
+            } else {
+                SharedPreferencesService.addBooleanItem(actual_setting.getId(), checked);
+            }
+
         }
     }
+
 
     private class OnSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
 

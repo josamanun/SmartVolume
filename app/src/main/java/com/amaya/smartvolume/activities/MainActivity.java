@@ -1,26 +1,35 @@
 package com.amaya.smartvolume.activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.fragments.HomeFragment;
 import com.amaya.smartvolume.fragments.SettingsFragment;
 import com.amaya.smartvolume.utils.FragmentManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import static com.amaya.smartvolume.adapters.SettingsListAdapter.setLogSettingChecked;
+import static com.amaya.smartvolume.fragments.HomeFragment.startLocationRequestUpdates;
+import static com.amaya.smartvolume.fragments.HomeFragment.tb_activate;
 
 public class MainActivity extends AppCompatActivity {
 
     // Global properties
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    public static final int MY_PERMISSIONS_WRITE_EXTERNAL = 98;
     public static final String TAG = "MainActivity";
 
     public static String HOME_FRAGMENT_TAG = "HOME_FRAGMENT_TAG";
@@ -66,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
                 HOME_FRAGMENT_TAG,
                 CONTENT_ID);
     }
+
+    public static void checkStoragePermission() {
+        globalActivity.requestPermissions(
+                new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                },
+                MY_PERMISSIONS_WRITE_EXTERNAL);
+    }
     // ---
 
     // Listeners
@@ -100,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
     // ---
 
     // Override
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationRequestUpdates();
+
+                } else {
+                    Toast.makeText(this, "Es necesario aceptar los permisos de GPS", Toast.LENGTH_LONG).show();
+                    tb_activate.setChecked(false);
+                }
+                return;
+            }
+            case MY_PERMISSIONS_WRITE_EXTERNAL: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setLogSettingChecked();
+                    return;
+                } else {
+                    Toast.makeText(this, "Es necesario aceptar los permisos de escritura", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

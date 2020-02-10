@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
@@ -49,22 +49,51 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ToggleButton
-            android:id="@+id/tb_activate"
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            style="@style/toggleButton"
-            android:background="@drawable/ic_toggle_bg"
-            android:foreground="@drawable/ripple"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <ToggleButton
+                android:id="@+id/tb_activate"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                style="@style/toggleButton"
+                android:background="@drawable/ic_toggle_bg"
+                android:foreground="@drawable/toggle_effect"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="76dp"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="400dp"
+                android:layout_height="80dp"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_id">
+
+            </com.google.android.gms.ads.AdView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="250dp"

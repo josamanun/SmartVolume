@@ -10,10 +10,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +19,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.activities.HelpActivity;
 import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.Logger;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import static com.amaya.smartvolume.activities.MainActivity.MY_PERMISSIONS_REQUEST_LOCATION;
 import static com.amaya.smartvolume.data.DataGenerator.format0;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel1;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel2;
@@ -39,7 +47,6 @@ import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel5;
 public class HomeFragment extends Fragment {
 
     // Global properties
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     public static final String BROADCAST_ACTION = "JOSELITO";
     public static final String LOCATION_EXTRA = "LOCATION_EXTRA";
 
@@ -63,9 +70,10 @@ public class HomeFragment extends Fragment {
     static AudioManager audioManager;
 
     // UI
-    private ToggleButton tb_activate;
+    public static ToggleButton tb_activate;
     static TextView tv_speed;
     private LinearLayout ll_help;
+    private AdView mAdView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -89,7 +97,7 @@ public class HomeFragment extends Fragment {
         SharedPreferencesService.initialize(globalContext);
         setListeners();
         initializeFragment();
-
+        initializeAdBanner();
         return view;
     }
 
@@ -97,6 +105,7 @@ public class HomeFragment extends Fragment {
         tb_activate = (ToggleButton) view.findViewById(R.id.tb_activate);
         tv_speed = (TextView) view.findViewById(R.id.tv_speed);
         ll_help = (LinearLayout) view.findViewById(R.id.ll_help);
+        mAdView = (AdView) view.findViewById(R.id.adView);
 
         tb_activate.setChecked(false);
     }
@@ -110,30 +119,47 @@ public class HomeFragment extends Fragment {
         locationRefreshReceiver = new LocationRefreshReceiver();
         globalContext.registerReceiver(locationRefreshReceiver, new IntentFilter(BROADCAST_ACTION));
         audioManager = (AudioManager) globalFragmentActivity.getSystemService(Context.AUDIO_SERVICE);
-
         locationIntent = new Intent(globalContext, LocationService.class);
+    }
+
+
+    private void initializeAdBanner() {
+        MobileAds.initialize(globalFragmentActivity, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     // Listeners
     private class OnActivateCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            if (isChecked) {
-                setSpeedLevels();
-                if (checkSpeedOrder()) {
-                    startLocationRequestUpdates();
-                    Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
-                } else {
-                    showDialog();
-                    tb_activate.setChecked(false);
-                }
-                // Activamos el servicio
+            // Comprobamos los permisos
+            if (ActivityCompat.checkSelfPermission(globalContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(globalContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                checkLocationPermission();
+                tb_activate.setChecked(false);
             } else {
-                // Desactivamos el servicio
-                stopLocationRequestUpdates();
-                Toast.makeText(globalContext, "GPS desactivado", Toast.LENGTH_SHORT).show();
-                setSpeedText(0);
+                if (isChecked) {
+                    setSpeedLevels();
+                    if (checkSpeedOrder()) {
+                        // Activamos el servicio
+                        startLocationRequestUpdates();
+                        Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
+                    } else {
+                        showDialog();
+                        tb_activate.setChecked(false);
+                    }
+                } else {
+                    // Desactivamos el servicio
+                    stopLocationRequestUpdates();
+                    Toast.makeText(globalContext, "GPS desactivado", Toast.LENGTH_SHORT).show();
+                    setSpeedText(0);
+                }
             }
         }
     }
@@ -173,7 +199,7 @@ public class HomeFragment extends Fragment {
         tv_speed.setText(speed);
     }
 
-    private void startLocationRequestUpdates() {
+    public static void startLocationRequestUpdates() {
         locationIntent.putExtra(speed_level_1_text, speed_level_1);
         locationIntent.putExtra(speed_level_2_text, speed_level_2);
         locationIntent.putExtra(speed_level_3_text, speed_level_3);
@@ -182,6 +208,9 @@ public class HomeFragment extends Fragment {
 
         // Start foreground location service
         ContextCompat.startForegroundService(globalContext, locationIntent);
+
+        tb_activate.setChecked(true);
+        Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
     }
 
     private void stopLocationRequestUpdates() {
@@ -263,6 +292,7 @@ public class HomeFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationRequestUpdates();
+                    tb_activate.setChecked(true);
                     Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(globalContext, "Es necesario aceptar los permisos", Toast.LENGTH_LONG).show();

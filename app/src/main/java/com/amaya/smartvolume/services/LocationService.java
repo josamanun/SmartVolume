@@ -1,22 +1,20 @@
 package com.amaya.smartvolume.services;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.amaya.smartvolume.fragments.HomeFragment;
+import androidx.core.app.NotificationCompat;
+
 import com.amaya.smartvolume.utils.Calculator;
 import com.amaya.smartvolume.utils.Logger;
 
@@ -53,21 +51,17 @@ public class LocationService extends Service {
         super.onCreate();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // Check for location permission
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            HomeFragment.checkLocationPermission();
-        } else {
             //Location Permission already granted
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    getRefreshFrequency(),
-                    0,
-                    locationListener);
-        }
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                getRefreshFrequency(),
+                0,
+                locationListener);
         startForeground(1, notification);
         return START_STICKY;
     }
