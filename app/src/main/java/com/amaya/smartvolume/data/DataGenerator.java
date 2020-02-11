@@ -24,11 +24,11 @@ public class DataGenerator {
     public static final List<String> speedOptions = getSpeedsOptions();
     public static final List<String> refreshLocationSegOptions = getFrequenciesOptions();
 
-    public static int default_speed_level_1 = 20;
-    public static int default_speed_level_2 = 40;
-    public static int default_speed_level_3 = 60;
-    public static int default_speed_level_4 = 80;
-    public static int default_speed_level_5 = 100;
+    public static int default_speed_level_1 = 15;
+    public static int default_speed_level_2 = 30;
+    public static int default_speed_level_3 = 50;
+    public static int default_speed_level_4 = 65;
+    public static int default_speed_level_5 = 80;
     public static String default_frequency = "0,5";
 
     public static final int getIndexOfDefaultSpeedLevel1 = getSpeedOptionIndex(default_speed_level_1);

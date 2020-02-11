@@ -140,7 +140,7 @@ public class SettingsData {
 
     public static Setting refresh_location_setting = new Setting(
             refresh_frequency_setting_id ,
-            "Frecuencia de localización",
+            "Frecuencia de GPS",
             "Puede alterar la precisión de la velocidad.",
             R.drawable.ic_refesh,
             ICON_LAYOUT,
