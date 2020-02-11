@@ -77,16 +77,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="76dp"
+            android:layout_marginBottom="10dp"
             android:gravity="bottom"
             android:orientation="vertical">
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
-                android:layout_width="400dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_id">
+            </com.google.android.gms.ads.AdView>
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_2_id">
 
             </com.google.android.gms.ads.AdView>
 
