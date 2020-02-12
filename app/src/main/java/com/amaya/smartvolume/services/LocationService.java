@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -46,7 +47,6 @@ public class LocationService extends Service {
         intent = new Intent(BROADCAST_ACTION);
 
         initializeForegroundNotification();
-        startForeground(1, notification);
 
         super.onCreate();
     }
@@ -62,7 +62,11 @@ public class LocationService extends Service {
                 getRefreshFrequency(),
                 0,
                 locationListener);
-        startForeground(1, notification);
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(1, notification);
+        }
         return START_STICKY;
     }
 
@@ -71,16 +75,22 @@ public class LocationService extends Service {
     }
 
     private void initializeForegroundNotification() {
-        String CHANNEL_ID = "my_channel_01";
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT);
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "my_channel_01";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
 
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
-        notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("")
-                .setContentText("").build();
+            notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("")
+                    .setContentText("").build();
+
+            startForeground(1, notification);
+        }
     }
 
     private class LocationListener implements android.location.LocationListener {

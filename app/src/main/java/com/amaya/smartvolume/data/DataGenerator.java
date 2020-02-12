@@ -82,6 +82,10 @@ public class DataGenerator {
     }
 
     private static int getFrequencyOptionIndex(String frequency) {
+        if (getFrequenciesOptions().get(0).contains(".")) {
+            frequency = frequency.replace(",",".");
+            return getFrequenciesOptions().indexOf(frequency + unit_seg);
+        }
         return getFrequenciesOptions().indexOf(frequency + unit_seg);
     }
 
