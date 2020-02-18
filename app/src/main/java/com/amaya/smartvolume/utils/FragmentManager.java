@@ -26,6 +26,7 @@ public class FragmentManager {
                 .beginTransaction()
                 .show(fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag))
                 .commit();
+        fragmentActivity.getSupportFragmentManager().executePendingTransactions();
     }
 
     private static void hideFragmentActivity(FragmentActivity fragmentActivity, String fragmentTag) {

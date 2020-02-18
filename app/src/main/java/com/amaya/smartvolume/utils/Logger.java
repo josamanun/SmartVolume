@@ -13,6 +13,9 @@ import java.util.Date;
 
 public class Logger {
 
+    public static String LOG_DIRECTORY_PATH =
+            Environment.getExternalStorageDirectory() + File.separator + "SmartVolume/Log";
+
     public static void logOnNote(String sBody) {
         Boolean logEnable = SharedPreferencesService.getBooleanItem(SettingsData.setting_enable_log_id, false);
         if (logEnable) {
@@ -25,8 +28,7 @@ public class Logger {
             String logMoment = logFormatter.format(log) + ":  "; //like 2016_01_12_13_50_23:
 
             try {
-                File root = new File(Environment.getExternalStorageDirectory()
-                        + File.separator + "SmartVolume", "Log");
+                File root = new File(LOG_DIRECTORY_PATH);
                 if (!root.exists()) {
                     root.mkdirs();
                 }

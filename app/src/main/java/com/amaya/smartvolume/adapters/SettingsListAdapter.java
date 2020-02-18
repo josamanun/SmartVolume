@@ -34,6 +34,8 @@ import static com.amaya.smartvolume.data.SettingsData.SETTING_VERSION_TYPE;
 
 public class SettingsListAdapter extends ArrayAdapter<Setting> {
 
+    private static String TAG = "SettingsListAdapter";
+
     private final Context globalContext;
     private final Setting[] values;
     private Setting actual_setting;
@@ -270,10 +272,8 @@ public class SettingsListAdapter extends ArrayAdapter<Setting> {
             } else {
                 SharedPreferencesService.addBooleanItem(actual_setting.getId(), checked);
             }
-
         }
     }
-
 
     private class OnSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
 

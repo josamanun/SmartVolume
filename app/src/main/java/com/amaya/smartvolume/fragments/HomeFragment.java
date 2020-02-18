@@ -2,6 +2,7 @@ package com.amaya.smartvolume.fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +11,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.amaya.smartvolume.R;
 import com.amaya.smartvolume.activities.HelpActivity;
+import com.amaya.smartvolume.data.SettingsData;
 import com.amaya.smartvolume.services.LocationService;
 import com.amaya.smartvolume.services.SharedPreferencesService;
 import com.amaya.smartvolume.utils.Logger;
@@ -43,10 +47,12 @@ import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel2;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel3;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel4;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel5;
+import static com.amaya.smartvolume.data.SettingsData.DEFAULT_SHOW_WELCOME_DIALOG;
 
 public class HomeFragment extends Fragment {
 
     // Global properties
+    public static final String TAG = "HomeFragment";
     public static final String BROADCAST_ACTION = "JOSELITO";
     public static final String LOCATION_EXTRA = "LOCATION_EXTRA";
 
@@ -98,6 +104,7 @@ public class HomeFragment extends Fragment {
         setListeners();
         initializeFragment();
         initializeAdBanner();
+        showWelcomeDialogIfFirstTime();
         return view;
     }
 
@@ -227,6 +234,35 @@ public class HomeFragment extends Fragment {
                         Manifest.permission.ACCESS_COARSE_LOCATION
                 },
                 MY_PERMISSIONS_REQUEST_LOCATION);
+    }
+
+    private void showWelcomeDialogIfFirstTime() {
+        Boolean alreadyChecked = SharedPreferencesService.getBooleanItem(SettingsData.show_welcome_dialog_id, DEFAULT_SHOW_WELCOME_DIALOG);
+        if(!alreadyChecked) {
+            // custom dialog
+            final Dialog dialog = new Dialog(globalContext);
+            dialog.setContentView(R.layout.welcome_dialog);
+            dialog.setTitle("¡Bienvenido!");
+
+            CheckBox checkboxWelcome = (CheckBox) dialog.findViewById(R.id.checkbox_welcome);
+            TextView tv_close_welcome_dialog = (TextView) dialog.findViewById(R.id.tv_close_welcome_dialog);
+
+            checkboxWelcome.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    Log.i(TAG, "onCheckedChanged: ");
+                    SharedPreferencesService.addBooleanItem(SettingsData.show_welcome_dialog_id, checked);
+                }
+            });
+
+            tv_close_welcome_dialog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
     }
 
     private void showDialog() {

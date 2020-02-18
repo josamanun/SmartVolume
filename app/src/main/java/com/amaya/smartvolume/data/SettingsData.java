@@ -26,6 +26,7 @@ public class SettingsData {
     public static String max_volume_setting_id = "setting_max_volume";
     public static final String setting_enable_log_id = "setting_enable_log";
     public static String refresh_frequency_setting_id = "refresh_frequency_setting ";
+    public static String show_welcome_dialog_id = "show_welcome_dialog ";
 
     public static final int ICON_LAYOUT = R.id.iv_setting_icon;
     public static final int TEXT_LAYOUT = R.id.tv_setting_text;
@@ -38,6 +39,8 @@ public class SettingsData {
     public static final int DEFAULT_SPEED_LEVEL_3_INDEX = getIndexOfDefaultSpeedLevel3; // Default: 60 kmh
     public static final int DEFAULT_SPEED_LEVEL_4_INDEX = getIndexOfDefaultSpeedLevel4; // Default: 80 kmh
     public static final int DEFAULT_SPEED_LEVEL_5_INDEX = getIndexOfDefaultSpeedLevel5; // Default: 100 kmh
+
+    public static final Boolean DEFAULT_SHOW_WELCOME_DIALOG = false;
 
     public static Setting[] getSettings() {
         Setting[] settings = {
@@ -131,7 +134,7 @@ public class SettingsData {
     public static Setting enable_log_setting = new Setting(
             setting_enable_log_id,
             "Registro de logs",
-            "Habilita el registro de logs que se almacenan en SmartVolume/Log/.",
+            "Los logs se almacenan en\nInternalStorage/SmartVolume/Log/",
             R.drawable.ic_log,
             false,
             ICON_LAYOUT,
