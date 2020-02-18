@@ -33,6 +33,7 @@ public class FragmentManager {
                 .beginTransaction()
                 .hide(fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag))
                 .commit();
+        fragmentActivity.getSupportFragmentManager().executePendingTransactions();
     }
 
     public static void addFragmentActivity(FragmentActivity fragmentActivity, Fragment fragment, String fragmentTag, int contentId) {
