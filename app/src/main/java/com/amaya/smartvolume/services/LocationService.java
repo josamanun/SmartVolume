@@ -121,7 +121,7 @@ public class LocationService extends Service {
                 );
 
                 // Comprobamos que la distancia recorrida es suficiente como para calcular la velocidad
-                if (m_distance < 4) {
+                if (m_distance < 4) { // metros/segundos
                     return 0;
                 }
 

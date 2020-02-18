@@ -49,9 +49,9 @@ public class SettingsData {
                 speed_level_5,
                 header_other_setting,
                 max_volume_setting,
-                enable_log_setting,
                 refresh_location_setting,
-                restore_setting,
+                enable_log_setting,
+                restore_setting, // Restore always here :)
                 version_setting // Version always last
         };
         return settings;
