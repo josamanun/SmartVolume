@@ -41,7 +41,6 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import static com.amaya.smartvolume.activities.MainActivity.MY_PERMISSIONS_REQUEST_LOCATION;
-import static com.amaya.smartvolume.data.DataGenerator.format0;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel1;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel2;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel3;
@@ -58,6 +57,9 @@ public class HomeFragment extends Fragment {
 
     static Context globalContext;
     static FragmentActivity globalFragmentActivity;
+
+    public static String ACTIVATE_TEXT = "Encencido";
+    public static String DEACTIVATE_TEXT= "Apagado";
 
     public static String speed_level_1_text = "speed_level_1";
     public static String speed_level_2_text= "speed_level_2";
@@ -77,7 +79,7 @@ public class HomeFragment extends Fragment {
 
     // UI
     public static ToggleButton tb_activate;
-    static TextView tv_speed;
+    public static TextView tv_activate;
     private LinearLayout ll_help;
     private AdView mAdView;
 
@@ -110,11 +112,12 @@ public class HomeFragment extends Fragment {
 
     private void setUI(View view) {
         tb_activate = (ToggleButton) view.findViewById(R.id.tb_activate);
-        tv_speed = (TextView) view.findViewById(R.id.tv_speed);
+        tv_activate = (TextView) view.findViewById(R.id.tv_activate);
         ll_help = (LinearLayout) view.findViewById(R.id.ll_help);
         mAdView = (AdView) view.findViewById(R.id.adView);
 
         tb_activate.setChecked(false);
+        setDeactivateText();
     }
 
     private void setListeners() {
@@ -150,22 +153,25 @@ public class HomeFragment extends Fragment {
                     && ActivityCompat.checkSelfPermission(globalContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 checkLocationPermission();
                 tb_activate.setChecked(false);
+                setDeactivateText();
             } else {
                 if (isChecked) {
                     setSpeedLevels();
                     if (checkSpeedOrder()) {
                         // Activamos el servicio
                         startLocationRequestUpdates();
+                        setActivateText();
                         Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                     } else {
                         showDialog();
                         tb_activate.setChecked(false);
+                        setDeactivateText();
                     }
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
+                    setDeactivateText();
                     Toast.makeText(globalContext, "GPS desactivado", Toast.LENGTH_SHORT).show();
-                    setSpeedText(0);
                 }
             }
         }
@@ -201,11 +207,6 @@ public class HomeFragment extends Fragment {
         speed_level_5 = getSpeedLevel5();
     }
 
-    public static void setSpeedText(float speedFloat) {
-        String speed = format0.format(speedFloat);
-        tv_speed.setText(speed);
-    }
-
     public static void startLocationRequestUpdates() {
         locationIntent.putExtra(speed_level_1_text, speed_level_1);
         locationIntent.putExtra(speed_level_2_text, speed_level_2);
@@ -217,6 +218,7 @@ public class HomeFragment extends Fragment {
         ContextCompat.startForegroundService(globalContext, locationIntent);
 
         tb_activate.setChecked(true);
+        setActivateText();
         Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
     }
 
@@ -304,6 +306,15 @@ public class HomeFragment extends Fragment {
             nextVolume = newVolume;
         }
     }
+
+    public static void setActivateText() {
+        tv_activate.setText(ACTIVATE_TEXT);
+        tv_activate.setTextColor(globalContext.getColor(R.color.colorPrimary));
+    }
+    public static void setDeactivateText() {
+        tv_activate.setText(DEACTIVATE_TEXT);
+        tv_activate.setTextColor(globalContext.getColor(R.color.colorGrey));
+    }
     // ---
 
     // Location receiver
@@ -312,7 +323,6 @@ public class HomeFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             float speed = intent.getFloatExtra(LOCATION_EXTRA, -1);
             if (speed != -1) {
-                setSpeedText(speed);
                 setVolumeLevel(speed);
             }
         }
@@ -329,10 +339,12 @@ public class HomeFragment extends Fragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationRequestUpdates();
                     tb_activate.setChecked(true);
+                    setActivateText();
                     Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(globalContext, "Es necesario aceptar los permisos", Toast.LENGTH_LONG).show();
                     tb_activate.setChecked(false);
+                    setDeactivateText();
                 }
                 return;
             }

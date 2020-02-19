@@ -22,6 +22,7 @@ import com.amaya.smartvolume.utils.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import static com.amaya.smartvolume.adapters.SettingsListAdapter.setLogSettingChecked;
+import static com.amaya.smartvolume.fragments.HomeFragment.setDeactivateText;
 import static com.amaya.smartvolume.fragments.HomeFragment.startLocationRequestUpdates;
 import static com.amaya.smartvolume.fragments.HomeFragment.tb_activate;
 
@@ -125,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationRequestUpdates();
-
                 } else {
                     Toast.makeText(this, "Es necesario aceptar los permisos de GPS", Toast.LENGTH_LONG).show();
                     tb_activate.setChecked(false);
+                    setDeactivateText();
                 }
                 return;
             }
@@ -136,11 +137,10 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setLogSettingChecked();
-                    return;
                 } else {
                     Toast.makeText(this, "Es necesario aceptar los permisos de escritura", Toast.LENGTH_LONG).show();
-                    return;
                 }
+                return;
             }
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
