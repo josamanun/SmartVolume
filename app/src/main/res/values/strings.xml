@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Smart Volume</string>
     <string name="app_package_path">com.amaya.smartvolume</string>
-    <string name="email_receiver">josamanun64@gmail.com</string>
+    <string name="email_receiver">jamayaez@gmail.com</string>
     <string name="restore_settings"><u>Restablecer ajustes</u></string>
     <string name="banner_id">ca-app-pub-2913361661995031/8788754348</string>
 </resources>
