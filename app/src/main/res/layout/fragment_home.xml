@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -39,9 +38,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:tint="@color/colorGrey"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_help"/>
                 </LinearLayout>
             </LinearLayout>
@@ -59,24 +57,35 @@
             android:gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tv_activate_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="PULSAR PARA"
+                android:fontFamily="@font/title_1"
+                android:textColor="@color/colorGrey"
+                android:textSize="24dp"
+                android:textAlignment="center"/>
+
             <ToggleButton
                 android:id="@+id/tb_activate"
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
                 style="@style/toggleButton"
                 android:background="@drawable/ic_toggle_bg"
                 android:foreground="@drawable/toggle_effect"/>
 
             <TextView
-                android:id="@+id/tv_activate"
-                android:layout_width="240dp"
+                android:id="@+id/tv_activate_2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Apagado"
+                android:text="ENCENDER"
                 android:fontFamily="@font/title_1"
                 android:textColor="@color/colorGrey"
-                android:textSize="28dp"
+                android:textSize="24dp"
                 android:textAlignment="center"/>
 
         </LinearLayout>

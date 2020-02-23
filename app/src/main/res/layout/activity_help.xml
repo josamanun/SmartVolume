@@ -76,7 +76,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="En próximas actualizaciones:\n\n  - Compatibilidad con llamadas.\n\n  - Desactivado automático al desconectar el dispositivo.\n\n  - Opción para que se pause la música al estar parado."
+                    android:text="En próximas actualizaciones:\n\n  - Compatibilidad con llamadas.\n\n  - Desactivado automático al desconectar el dispositivo bluetooth."
                     android:textSize="14sp"
                     android:textColor="@color/subhead"
                     android:fontFamily="sans-serif-light"
@@ -96,7 +96,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Si se te ocurren más funciones o tienes algún problema no dudes en mandarnos un mensaje :)"
+                        android:text="Si se te ocurren más funciones o tienes algún problema no dudes en enviarnos un mensaje."
                         android:textSize="15sp"
                         android:textColor="@color/body"
                         android:fontFamily="sans-serif-medium"

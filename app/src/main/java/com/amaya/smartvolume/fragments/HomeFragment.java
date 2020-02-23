@@ -46,7 +46,7 @@ import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel2;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel3;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel4;
 import static com.amaya.smartvolume.data.DataGenerator.getSpeedLevel5;
-import static com.amaya.smartvolume.data.SettingsData.DEFAULT_SHOW_WELCOME_DIALOG;
+import static com.amaya.smartvolume.data.SettingsData.DEFAULT_CHECKED_WELCOME_DIALOG;
 
 public class HomeFragment extends Fragment {
 
@@ -58,8 +58,8 @@ public class HomeFragment extends Fragment {
     static Context globalContext;
     static FragmentActivity globalFragmentActivity;
 
-    public static String ACTIVATE_TEXT = "Encencido";
-    public static String DEACTIVATE_TEXT= "Apagado";
+    public static String DEACTIVATE_TEXT = "ENCENDER";
+    public static String ACTIVATE_TEXT= "APAGAR";
 
     public static String speed_level_1_text = "speed_level_1";
     public static String speed_level_2_text= "speed_level_2";
@@ -112,7 +112,7 @@ public class HomeFragment extends Fragment {
 
     private void setUI(View view) {
         tb_activate = (ToggleButton) view.findViewById(R.id.tb_activate);
-        tv_activate = (TextView) view.findViewById(R.id.tv_activate);
+        tv_activate = (TextView) view.findViewById(R.id.tv_activate_2);
         ll_help = (LinearLayout) view.findViewById(R.id.ll_help);
         mAdView = (AdView) view.findViewById(R.id.adView);
 
@@ -158,6 +158,8 @@ public class HomeFragment extends Fragment {
                 if (isChecked) {
                     setSpeedLevels();
                     if (checkSpeedOrder()) {
+                        // Reiniciamos el contador de muteo
+                        com.amaya.smartvolume.utils.AudioManager.resetMuteTimer();
                         // Activamos el servicio
                         startLocationRequestUpdates();
                         setActivateText();
@@ -239,7 +241,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void showWelcomeDialogIfFirstTime() {
-        Boolean alreadyChecked = SharedPreferencesService.getBooleanItem(SettingsData.show_welcome_dialog_id, DEFAULT_SHOW_WELCOME_DIALOG);
+        Boolean alreadyChecked = SharedPreferencesService.getBooleanItem(SettingsData.show_welcome_dialog_id, DEFAULT_CHECKED_WELCOME_DIALOG);
         if(!alreadyChecked) {
             // custom dialog
             final Dialog dialog = new Dialog(globalContext);
@@ -295,25 +297,25 @@ public class HomeFragment extends Fragment {
         Logger.logOnNote("Next Vol: " + nextVolume);
 
         if (nextVolume != -1 && newVolume == nextVolume) {
-            Logger.logOnNote("-> CASO B: next = -1" + "\n");
+            Logger.logOnNote("-> Volumen verificado, reiniciado nextVolume" + "\n");
             nextVolume = -1;
             // Cambiar volumen
             if (newVolume != actualVolume) {
                 audioManager.setStreamVolume(audioManagerMode, newVolume, 0);
             }
         } else {
-            Logger.logOnNote("-> CASO A: next = new" + "\n");
+            Logger.logOnNote("-> Nuevo volumen, actualizado nextVolume " + "\n");
             nextVolume = newVolume;
         }
     }
 
     public static void setActivateText() {
         tv_activate.setText(ACTIVATE_TEXT);
-        tv_activate.setTextColor(globalContext.getColor(R.color.colorPrimary));
+//        tv_activate.setTextColor(globalContext.getColor(R.color.colorPrimary));
     }
     public static void setDeactivateText() {
         tv_activate.setText(DEACTIVATE_TEXT);
-        tv_activate.setTextColor(globalContext.getColor(R.color.colorGrey));
+//        tv_activate.setTextColor(globalContext.getColor(R.color.colorGrey));
     }
     // ---
 

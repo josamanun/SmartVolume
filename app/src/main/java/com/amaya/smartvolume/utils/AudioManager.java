@@ -36,22 +36,34 @@ public class AudioManager {
             return (int) (maxVolume * volume_level_max);
         }
     }
-
-    public static int getVolumeOfSpeedLevel(int speed, int maxVolume) {
-        if (speed == -1) {
-            return 0;
-        } else if (speed < speed_level_1) {
-            return (int) (maxVolume * volume_level_0);
-        } else if (speed < speed_level_2) {
-            return (int) (maxVolume * volume_level_1);
-        } else if (speed < speed_level_3) {
-            return (int) (maxVolume * volume_level_2);
-        } else if (speed < speed_level_4) {
-            return (int) (maxVolume * volume_level_3);
-        } else if (speed < speed_level_5) {
-            return (int) (maxVolume * volume_level_4);
-        } else {
-            return getMaxVolume(maxVolume);
-        }
+    private static long muteTimer = 0;
+    public static void resetMuteTimer() {
+        muteTimer = 0;
     }
+    public static int getVolumeOfSpeedLevel(int speed, int maxVolume) {
+
+        if (speed == -1) return 0;
+
+        if (SharedPreferencesService.getBooleanItem(SettingsData.setting_enable_mute_id, false)) {
+            if (speed == 0) {
+                if (muteTimer == 0) {
+                    muteTimer = System.currentTimeMillis() + (SettingsData.DEFAULT_SECONDS_TO_MUTE * 1000) ;
+                } else if (System.currentTimeMillis() > muteTimer) {
+                    return 0;
+                }
+            } else {
+                muteTimer = 0;
+            }
+        }
+
+        if (speed < speed_level_1) return (int) (maxVolume * volume_level_0);
+        if (speed < speed_level_2) return (int) (maxVolume * volume_level_1);
+        if (speed < speed_level_3) return (int) (maxVolume * volume_level_2);
+        if (speed < speed_level_4) return (int) (maxVolume * volume_level_3);
+        if (speed < speed_level_5) return (int) (maxVolume * volume_level_4);
+        if (speed > speed_level_5) return getMaxVolume(maxVolume);
+
+        return 0;
+    }
+
 }
