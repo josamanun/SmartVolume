@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment {
 
     // UI
     public static ToggleButton tb_activate;
-    public static TextView tv_activate;
     private LinearLayout ll_help;
     private AdView mAdView;
 
@@ -112,12 +111,10 @@ public class HomeFragment extends Fragment {
 
     private void setUI(View view) {
         tb_activate = (ToggleButton) view.findViewById(R.id.tb_activate);
-        tv_activate = (TextView) view.findViewById(R.id.tv_activate_2);
         ll_help = (LinearLayout) view.findViewById(R.id.ll_help);
         mAdView = (AdView) view.findViewById(R.id.adView);
 
         tb_activate.setChecked(false);
-        setDeactivateText();
     }
 
     private void setListeners() {
@@ -153,7 +150,6 @@ public class HomeFragment extends Fragment {
                     && ActivityCompat.checkSelfPermission(globalContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 checkLocationPermission();
                 tb_activate.setChecked(false);
-                setDeactivateText();
             } else {
                 if (isChecked) {
                     setSpeedLevels();
@@ -162,17 +158,14 @@ public class HomeFragment extends Fragment {
                         com.amaya.smartvolume.utils.AudioManager.resetMuteTimer();
                         // Activamos el servicio
                         startLocationRequestUpdates();
-                        setActivateText();
                         Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                     } else {
                         showDialog();
                         tb_activate.setChecked(false);
-                        setDeactivateText();
                     }
                 } else {
                     // Desactivamos el servicio
                     stopLocationRequestUpdates();
-                    setDeactivateText();
                     Toast.makeText(globalContext, "GPS desactivado", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -220,7 +213,6 @@ public class HomeFragment extends Fragment {
         ContextCompat.startForegroundService(globalContext, locationIntent);
 
         tb_activate.setChecked(true);
-        setActivateText();
         Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
     }
 
@@ -308,15 +300,6 @@ public class HomeFragment extends Fragment {
             nextVolume = newVolume;
         }
     }
-
-    public static void setActivateText() {
-        tv_activate.setText(ACTIVATE_TEXT);
-//        tv_activate.setTextColor(globalContext.getColor(R.color.colorPrimary));
-    }
-    public static void setDeactivateText() {
-        tv_activate.setText(DEACTIVATE_TEXT);
-//        tv_activate.setTextColor(globalContext.getColor(R.color.colorGrey));
-    }
     // ---
 
     // Location receiver
@@ -341,12 +324,10 @@ public class HomeFragment extends Fragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startLocationRequestUpdates();
                     tb_activate.setChecked(true);
-                    setActivateText();
                     Toast.makeText(globalContext, "GPS activado", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(globalContext, "Es necesario aceptar los permisos", Toast.LENGTH_LONG).show();
                     tb_activate.setChecked(false);
-                    setDeactivateText();
                 }
                 return;
             }
