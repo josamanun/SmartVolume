@@ -26,6 +26,7 @@
         app:itemTextColor="@color/icon_selector_color"
         app:menu="@menu/toolbar_menu"
         app:labelVisibilityMode="unlabeled"
+        app:itemIconSize="28sp"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
