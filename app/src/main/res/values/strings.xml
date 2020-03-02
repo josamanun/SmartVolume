@@ -4,4 +4,32 @@
     <string name="email_receiver">jamayaez@gmail.com</string>
     <string name="restore_settings"><u>Restablecer ajustes</u></string>
     <string name="banner_id">ca-app-pub-2913361661995031/8788754348</string>
+
+    <string name="help_text">
+        Escuchar música mientras circulas con tu moto nunca ha sido tan cómodo y seguro.
+        \n\nSmart Volume te permite disfrutar de un control inteligente del volumen de tu dispositivo mientras circulas, para que
+        puedas disfrutar de la conducción sin preocuparte de tener que manipular ningún dispositivo de música.
+        \n\nEl funcionamiento es simple: al aumentar la velocidad, aumenta el volumen y al bajar la velocidad, disminuye el volumen.
+        \n\nActivarlo es muy sencillo:
+        \n\n1. Conecta tu móvil a los auriculares bluetooth de tu casco.
+        \n\n2. Comienza a reproducir la música en tu aplicación de música favorita.
+        \n\n3. Abre Smart Volume y pulsa el botón de encendido.
+        \n\nAl momento notarás cómo el volumen de la música disminuye, lo que indica que el servicio está funcionando.
+        \n\nA partir de ese momento podrás disfrutar de parar a repostar sin tener que manipular tu dispositivo, podrás estacionar y
+        hablar con alguien sin que te moleste el volumen de la música y podrás escuchar tu entorno al parar en un semáforo,
+        pero sobre todo, sentir que al acelerar sube el volumen de la música y que lo puedas disfrutar de forma segura.
+        \n\nTambién se incluye una opción para que la música se silencie al permanecer parado un tiempo, así como otras opciones que se irán añadiendo con próximas actualizaciones.
+        \n\nSi tienes cualquier sugerencia nos encantaría oírla.
+        \n\n¡No dudes en ponerte en contacto con nosotros!
+    </string>
+
+    <string name="welcome_text">
+        ¡Hola!
+        \n\nEspero que disfrutes del viaje escuchando tu música favorita sin preocupaciones gracias a Smart Volume.
+        \n\nActivarlo es muy sencillo:
+        \n\n1. Conecta tu móvil a los auriculares bluetooth de tu casco.
+        \n\n2. Comienza a reproducir la música en tu aplicación de música favorita.
+        \n\n3. Abre Smart Volume y pulsa el botón de encendido.
+        \n\n\Pulsa el icono de Ayuda para obtener más información o si quieres ponerte en contacto con nosotros.
+    </string>
 </resources>

@@ -53,74 +53,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 >
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="Smart Volume consigue que no sea necesario manipular tu dispositivo para ajustar el volumen de la música, para que disfrutes de la conducción sin preocupaciones y de forma segura.\n\nEl funcionamiento es simple: aumenta la velocidad y sube el volumen; disminuye la velocidad y el volumen baja.\n\nLos niveles de volumen se activan cuando se alcanza la velocidad introducida."
-                    android:textColor="@color/body"
-                    android:textSize="15sp" />
+                    android:text="@string/help_text"
+                    android:justificationMode="inter_word"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorBorder"
+                    android:fontFamily="sans-serif-light" />
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="50dp"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="En próximas actualizaciones:\n\n  - Compatibilidad con llamadas.\n\n  - Desactivado automático al desconectar el dispositivo bluetooth."
-                    android:textSize="14sp"
-                    android:textColor="@color/subhead"
-                    android:fontFamily="sans-serif-light"
-                    />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="20dp"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Si se te ocurren más funciones o tienes algún problema no dudes en enviarnos un mensaje."
-                        android:textSize="15sp"
-                        android:textColor="@color/body"
-                        android:fontFamily="sans-serif-medium"
-                        />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="16dp"
                     android:gravity="bottom|center_horizontal"
                     android:orientation="horizontal">
+
                     <Button
                         android:id="@+id/btn_write_message"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
-                        android:text="Enviar mensaje"
+                        android:text="Contactar"
                         android:textColor="@color/white"
                         android:background="@color/colorPrimary"
-                        android:padding="10dp"/>
+                        android:fontFamily="@font/title_1"
+                        android:padding="15dp"/>
                 </LinearLayout>
 
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

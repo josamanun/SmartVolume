@@ -43,7 +43,7 @@ public class SettingsData {
 
     public static final int DEFAULT_SECONDS_TO_MUTE = 5;
 
-    public static final Boolean DEFAULT_CHECKED_WELCOME_DIALOG = true;
+    public static final Boolean DEFAULT_CHECKED_WELCOME_DIALOG = false;
 
     public static Setting[] getSettings() {
         Setting[] settings = {
