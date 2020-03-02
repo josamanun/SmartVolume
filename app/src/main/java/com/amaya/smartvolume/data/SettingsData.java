@@ -56,8 +56,9 @@ public class SettingsData {
                 header_other_setting,
                 max_volume_setting,
                 enable_mute_settings,
-                refresh_location_setting,
-                enable_log_setting,
+//                TODO: Ajustes de desarrollador
+//                refresh_location_setting,
+//                enable_log_setting,
                 restore_setting, // Restore always here :)
                 version_setting // Version always last
         };
